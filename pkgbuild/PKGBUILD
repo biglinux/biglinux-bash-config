@@ -1,8 +1,8 @@
 # Maintainer: Barnabé di Kartola <barnabedikartola@gmail.com>
 
-pkgname=biglinux-package-template
-pkgdesc="Package template for biglinux"
-# depends=('')
+pkgname=biglinux-bash-config
+pkgdesc="Better interactive mode"
+depends=('fzf' 'blesh-git' 'grc' 'bash-pureline-git' 'ripgrep' 'ttf-nerd-fonts-symbols-with-biglinux')
 # makedepends=('')
 # conflicts=('')
 pkgver=$(date +%y.%m.%d)

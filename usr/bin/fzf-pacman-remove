@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+# https://aur.archlinux.org/packages/paruz
+pacman --color always -Q | cut -f 1 -d ' ' | fzf --multi --ansi --preview 'pacman -Qi {1}' | xargs -ro sudo pacman -Rns

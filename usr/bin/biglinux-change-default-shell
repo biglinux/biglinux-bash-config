@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+
+#Translation
+export TEXTDOMAINDIR="/usr/share/locale"
+export TEXTDOMAIN=biglinux-bash-config
+
+
+backup_and_copy() {
+    src=$1
+    dest=$2
+
+    if [[ -e $dest ]]; then
+        counter=1
+        while [[ -e "${dest}.backup.${counter}" ]]; do
+            ((counter++))
+        done
+
+        cp "$dest" "${dest}.backup.${counter}"
+        echo "Backup created: ${dest}.backup.${counter}."
+    fi
+
+    cp -f "$src" "$dest"
+}
+
+bash_power() {
+    backup_and_copy "/usr/share/biglinux/bash-config/bashrc" "$HOME/.bashrc"
+    backup_and_copy "/usr/share/biglinux/bash-config/blerc" "$HOME/.blerc"
+    backup_and_copy "/usr/share/biglinux/bash-config/pureline.conf" "$HOME/.pureline.conf"
+    backup_and_copy "/usr/share/biglinux/bash-config/KonsoleBash.profile" "$HOME/.local/share/konsole/Bash.profile"
+    sed -i 's|DefaultProfile=.*|DefaultProfile=Bash.profile|g' "$HOME/.config/konsolerc"
+    rm -f "$HOME/.bash-disable-blesh"
+    rm -f "$HOME/.bash-disable-colors"
+}
+
+if [[ "$1" = "bash-power" ]]; then
+    bash_power
+elif [[ "$1" = "bash-normal" ]]; then
+    if [[ ! -e "$HOME/.blerc" ]]; then
+        bash_power
+    fi
+    echo 1 > "$HOME/.bash-disable-blesh"
+    echo 1 > "$HOME/.bash-disable-colors"
+elif [[ "$1" = "zsh" ]]; then
+    sed -i 's|DefaultProfile=.*|DefaultProfile=Zsh.profile|g' "$HOME/.config/konsolerc"
+else
+    echo $"Utilize uma das opções:"
+    echo "bash-power   - " $"Bash + ble.sh + fzf e recursos para adicionar mais cores aos resultados"
+    echo "bash-normal  - " $"Bash + fzf"
+    echo "zsh          - " $"Zsh com diversos recursos inclusos"
+fi
