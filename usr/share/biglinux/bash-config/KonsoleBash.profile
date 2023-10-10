@@ -29,7 +29,7 @@ UnderlineFilesEnabled=true
 KeyBindings=default
 
 [Scrolling]
-HistorySize=500
+HistorySize=3000
 
 [Terminal Features]
 BidiTableDirOverride=true
