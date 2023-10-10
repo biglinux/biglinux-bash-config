@@ -2,7 +2,7 @@
 
 pkgname=biglinux-bash-config
 pkgdesc="Better interactive mode"
-depends=('fzf' 'blesh-git' 'grc' 'ripgrep' 'ttf-nerd-fonts-symbols-with-biglinux' 'eza' )
+depends=('fzf' 'blesh-git' 'grc' 'ripgrep' 'ttf-nerd-fonts-symbols-with-biglinux' 'eza' 'bat' 'biglinux-nano-config' )
 # makedepends=('')
 # conflicts=('')
 pkgver=$(date +%y.%m.%d)
