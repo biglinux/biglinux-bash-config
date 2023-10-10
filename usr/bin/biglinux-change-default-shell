@@ -28,8 +28,7 @@ bash_power() {
     backup_and_copy "/usr/share/biglinux/bash-config/pureline.conf" "$HOME/.pureline.conf"
     backup_and_copy "/usr/share/biglinux/bash-config/KonsoleBash.profile" "$HOME/.local/share/konsole/Bash.profile"
     sed -i 's|DefaultProfile=.*|DefaultProfile=Bash.profile|g' "$HOME/.config/konsolerc"
-    rm -f "$HOME/.bash-disable-blesh"
-    rm -f "$HOME/.bash-disable-colors"
+    rm -f "$HOME/.bash-normal"
     kwriteconfig5 --file ~/.config/dolphinrc --group "Desktop Entry" --key DefaultProfile Bash.profile 
 }
 
@@ -39,8 +38,7 @@ elif [[ "$1" = "bash-normal" ]]; then
     if [[ ! -e "$HOME/.blerc" ]]; then
         bash_power
     fi
-    echo 1 > "$HOME/.bash-disable-blesh"
-    echo 1 > "$HOME/.bash-disable-colors"
+    echo 1 > "$HOME/.bash-normal"
 elif [[ "$1" = "zsh" ]]; then
     sed -i 's|DefaultProfile=.*|DefaultProfile=Zsh.profile|g' "$HOME/.config/konsolerc"
     kwriteconfig5 --file ~/.config/dolphinrc --group "Desktop Entry" --key DefaultProfile Zsh.profile 
