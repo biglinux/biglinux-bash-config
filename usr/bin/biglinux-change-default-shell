@@ -30,6 +30,7 @@ bash_power() {
     sed -i 's|DefaultProfile=.*|DefaultProfile=Bash.profile|g' "$HOME/.config/konsolerc"
     rm -f "$HOME/.bash-disable-blesh"
     rm -f "$HOME/.bash-disable-colors"
+    kwriteconfig5 --file ~/.config/dolphinrc --group "Desktop Entry" --key DefaultProfile Bash.profile 
 }
 
 if [[ "$1" = "bash-power" ]]; then
@@ -42,6 +43,7 @@ elif [[ "$1" = "bash-normal" ]]; then
     echo 1 > "$HOME/.bash-disable-colors"
 elif [[ "$1" = "zsh" ]]; then
     sed -i 's|DefaultProfile=.*|DefaultProfile=Zsh.profile|g' "$HOME/.config/konsolerc"
+    kwriteconfig5 --file ~/.config/dolphinrc --group "Desktop Entry" --key DefaultProfile Zsh.profile 
 else
     echo $"Utilize uma das opções:"
     echo "bash-power   - " $"Bash + ble.sh + fzf e recursos para adicionar mais cores aos resultados"
