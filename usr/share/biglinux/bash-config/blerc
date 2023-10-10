@@ -163,7 +163,7 @@ nameBg="\[\e[48;5;248m\]"
 nameFg="\[\e[38;5;248m\]"
 
 # one line PS1
-PS1="$systemBg$blueFg   $systemFg$blueBg $blackFg$blueBg\w $fmtReset$blueFg$fmtReset "
+PS1="$systemBg$blueFg   $systemFg$blueBg $blackFg$blueBg\w $fmtReset$blueFg$fmtReset "
 
 # two lines PS1
 # PS1="\n$systemBg$blueFg   \u $systemFg$blueBg $blackFg$blueBg\w $fmtReset$blueFg$fmtReset\n$systemBg$whiteFg  $systemFg$fmtReset$systemFg "
