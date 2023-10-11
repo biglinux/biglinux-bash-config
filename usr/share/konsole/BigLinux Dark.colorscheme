@@ -41,7 +41,7 @@ Color=92,150,92
 Color=106,244,106
 
 [Color3]
-Color=220,192,135
+Color=220,190,134
 
 [Color3Faint]
 Color=150,131,92
@@ -68,13 +68,13 @@ Color=100,41,100
 Color=244,106,244
 
 [Color6]
-Color=171,164,235
+Color=154,167,170
 
 [Color6Faint]
-Color=142,140,200
+Color=91,98,100
 
 [Color6Intense]
-Color=111,137,255
+Color=217,235,240
 
 [Color7]
 Color=220,220,220
