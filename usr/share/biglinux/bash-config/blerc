@@ -67,7 +67,7 @@
 ## The following setting turns on the delayed load of history when an non-empty
 ## value is set.
 
-#bleopt history_lazyload=1
+bleopt history_lazyload=1
 
 
 ## The following setting turns on the delete selection mode when an non-empty
@@ -555,7 +555,7 @@ bleopt grapheme_cluster=extended
 ## If "complete_ambiguous" has non-empty values, ambiguous completion
 ## candidates are generated for completion.
 
-#bleopt complete_ambiguous=1
+bleopt complete_ambiguous=
 
 
 ## If "complete_contract_function_names" has non-empty values, the function
@@ -579,7 +579,7 @@ bleopt grapheme_cluster=extended
 ## default is 0, which means that the quotation is simplified unless the number
 ## of characters increases by the simplification.
 
-#bleopt complete_requote_threshold=0
+bleopt complete_requote_threshold=-1
 
 
 ## If "complete_auto_history" has non-empty values, auto-complete searches
@@ -591,7 +591,7 @@ bleopt grapheme_cluster=extended
 ## The following setting controls the delay of auto-complete after the last
 ## user input. The unit is millisecond.
 
-#bleopt complete_auto_delay=100
+bleopt complete_auto_delay=300
 
 
 ## The setting "complete_auto_wordbreaks" is used as the delimiters for
@@ -836,7 +836,7 @@ bleopt menu_align_max=150
 ## default.
 
 #bleopt highlight_syntax=
-#bleopt highlight_filename=
+bleopt highlight_filename=
 #bleopt highlight_variable=
 
 
@@ -854,9 +854,9 @@ bleopt menu_align_max=150
 ## "syntax_eval_polling_interval" specifies the maximal interval between the
 ## user-input checking.
 
-#bleopt highlight_timeout_sync=500
-#bleopt highlight_timeout_async=5000
-#bleopt syntax_eval_polling_interval=50
+bleopt highlight_timeout_sync=50
+bleopt highlight_timeout_async=1000
+bleopt syntax_eval_polling_interval=50
 
 
 ## The following settings specify graphic styles of each faces.
@@ -932,6 +932,8 @@ bleopt menu_align_max=150
 
 ble-face -s filename_directory        underline,fg=blue
 ble-face -s command_builtin           bold,fg=green
+ble-face -s syntax_command           fg=green
+
 ble-face -s syntax_error              fg=red
 ble-face -s auto_complete             fg=242
 ble-face -s varname_unset             fg=yellow
