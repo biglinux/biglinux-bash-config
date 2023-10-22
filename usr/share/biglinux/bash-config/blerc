@@ -163,7 +163,12 @@ nameBg="\[\e[48;5;248m\]"
 nameFg="\[\e[38;5;248m\]"
 
 # one line PS1
-PS1="$systemBg$blueFg   $systemFg$blueBg $blackFg$blueBg\w $fmtReset$blueFg$fmtReset "
+if [[ -n $CHROME_DESKTOP ]]; then
+    PS1="$systemBg$blueFg \u@\h $systemFg$blueBg $blackFg$blueBg\w $fmtReset$blueFg$fmtReset "
+else
+    PS1="$systemBg$blueFg   $systemFg$blueBg $blackFg$blueBg\w $fmtReset$blueFg$fmtReset "
+fi
+
 
 # two lines PS1
 # PS1="\n$systemBg$blueFg   \u $systemFg$blueBg $blackFg$blueBg\w $fmtReset$blueFg$fmtReset\n$systemBg$whiteFg  $systemFg$fmtReset$systemFg "
