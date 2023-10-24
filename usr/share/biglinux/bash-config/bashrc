@@ -28,11 +28,8 @@ alias la='ls -A'
 alias l='ls -CF'
 
 # Load Blesh for enhanced interactive shell experience
-if [[ -f /usr/share/blesh/ble.sh ]] && [[ ! -f ~/.bash-normal ]]; then
-    # Disable blesh in tty
-    if [[ $TERM != linux ]]; then
-        source /usr/share/blesh/ble.sh --noattach
-    fi
+if [[ -f /usr/share/blesh/ble.sh ]] && [[ ! -f ~/.bash-normal ]] && [[ $TERM != linux ]]; then
+    source /usr/share/blesh/ble.sh --noattach
     #GRC Configuration for colorizing command outputs
     #GRC_ALIASES=true
     #GRC="/usr/bin/grc"
@@ -142,8 +139,27 @@ fi
 if [[ ${BLE_VERSION-} ]]; then
     ble-attach
 else
-
+    # tty
     if [[ $TERM = linux ]]; then
         PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+    else
+        # bash-normal
+        greenBg="\[\e[48;5;115m\]"
+        greenFg="\[\e[38;5;115m\]"
+
+        blackFg="\[\e[30m\]"
+        whiteFg="\[\e[37m\]"
+
+        # Reset
+        fmtReset="\[\e[0m\]"
+
+        systemBg="\[\e[48;5;237m\]"
+        systemFg="\[\e[38;5;237m\]"
+
+        nameBg="\[\e[48;5;248m\]"
+        nameFg="\[\e[38;5;248m\]"
+
+        # one line PS1
+        PS1="$systemBg$greenFg   $systemFg$greenBg $blackFg$greenBg\w $fmtReset$greenFg$fmtReset "
     fi
 fi
