@@ -2,7 +2,14 @@
 
 pkgname=biglinux-bash-config
 pkgdesc="Better interactive mode"
-depends=('fzf' 'blesh-git' 'grc' 'ripgrep' 'ttf-nerd-fonts-symbols-with-biglinux'  'bat' 'biglinux-nano-config' )
+depends=('fzf'
+    'bat'
+    'biglinux-nano-config'
+    'blesh-git'
+    'grc'
+    'ripgrep'
+    'ttf-meslo-nerd-font-powerlevel10k'
+    'ttf-nerd-fonts-symbols-with-biglinux')
 depends_x86_64=('eza')
 # makedepends=('')
 # conflicts=('')
