@@ -3,7 +3,6 @@
 pkgname=biglinux-bash-config
 pkgdesc="Better interactive mode"
 depends=('fzf'
-    'bash'
     'bat'
     'biglinux-nano-config'
     'blesh-git'
