@@ -166,7 +166,7 @@ nameFg="\[\e[38;5;248m\]"
 if [[ -n $CHROME_DESKTOP ]]; then
     PS1="$systemBg$blueFg \u@\h $systemFg$blueBg $blackFg$blueBg\w $fmtReset$blueFg$fmtReset "
 else
-    PS1="$systemBg$blueFg   $systemFg$blueBg $blackFg$blueBg\w $fmtReset$blueFg$fmtReset "
+    PS1="$systemBg$blueFg   $systemFg$blueBg $blackFg$blueBg\w $fmtReset$blueFg$fmtReset "
 fi
 
 
