@@ -16,16 +16,24 @@ esac
 # Enable color support and set related aliases
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls --color=auto'
+    # alias ls='ls --color=auto'
     alias dir='dir --color=auto'
     alias vdir='vdir --color=auto'
     alias grep='grep --color=auto'
 fi
 
-# More ls aliases
-alias ll='ls -l'
-alias la='ls -A'
-alias l='ls -CF'
+# Complete substitution of the ls command with exa
+alias ls='exa'
+
+# Redefine ls options to exa equivalents
+alias ll='exa -l'
+alias la='exa -a'
+alias l='exa -F'
+
+# # More ls aliases
+# alias ll='ls -l'
+# alias la='ls -A'
+# alias l='ls -CF'
 
 # Load Blesh for enhanced interactive shell experience
 if [[ -f /usr/share/blesh/ble.sh ]] && [[ ! -f ~/.bash-normal ]] && [[ $TERM != linux ]]; then
