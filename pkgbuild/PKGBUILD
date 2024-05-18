@@ -6,12 +6,10 @@ depends=('fzf'
     'bat'
     'biglinux-nano-config'
     'blesh-git'
-    'exa'
     'grc'
     'ripgrep'
     'ttf-meslo-nerd-font-powerlevel10k'
     'ttf-nerd-fonts-symbols-with-biglinux')
-depends_x86_64=('eza')
 # makedepends=('')
 # conflicts=('')
 pkgver=$(date +%y.%m.%d)
