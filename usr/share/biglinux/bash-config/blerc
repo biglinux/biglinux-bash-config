@@ -147,8 +147,8 @@ bleopt history_lazyload=1
 ## "prompt_ps1_transient" is effective only when the current working directory
 ## did not change since the last command line.
 
-blueBg="\[\e[44m\]"
-blueFg="\[\e[34m\]"
+blueBg="\[\e[39m\]"
+blueFg="\[\e[19m\]"
 
 blackFg="\[\e[30m\]"
 whiteFg="\[\e[37m\]"
@@ -166,7 +166,9 @@ nameFg="\[\e[38;5;248m\]"
 if [[ -n $CHROME_DESKTOP ]]; then
     PS1="$systemBg$blueFg \u@\h $systemFg$blueBg $blackFg$blueBg\w $fmtReset$blueFg$fmtReset "
 else
-    PS1="$systemBg$blueFg   $systemFg$blueBg $blackFg$blueBg\w $fmtReset$blueFg$fmtReset "
+    PS1="
+$systemBg$blueFg \t  \w 
+$systemFg$blueBg  $systemBg$blueFg \u $blackFg$blueBg$fmtReset$systemFg$fmtReset "
 fi
 
 
