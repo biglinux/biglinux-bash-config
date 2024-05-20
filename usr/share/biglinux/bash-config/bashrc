@@ -168,6 +168,6 @@ else
         nameFg="\[\e[38;5;248m\]"
 
         # one line PS1
-        PS1="$systemBg$greenFg   $systemFg$greenBg $blackFg$greenBg\w $fmtReset$greenFg$fmtReset "
+        PS1="$systemBg$greenFg   $systemFg$greenBg $blackFg$greenBg\w $fmtReset$greenFg$fmtReset "
     fi
 fi
