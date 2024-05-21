@@ -135,7 +135,6 @@ bleopt history_lazyload=1
 
 #bleopt info_display=top
 
-
 ## The following settings controls the prompt after the cursor left the command
 ## line.  "prompt_ps1_final" contains a prompt string.  "prompt_ps1_transient"
 ## is a colon-separated list of fields "always", "same-dir" and "trim".  The
@@ -146,6 +145,89 @@ bleopt history_lazyload=1
 ## "prompt_ps1_transient" contains a field "same-dir", the setting of
 ## "prompt_ps1_transient" is effective only when the current working directory
 ## did not change since the last command line.
+
+# Define colors and styles
+blueBg="\[\e[44m\]"
+blueFg="\[\e[34m\]"
+blue2Fg="\e[38;5;31m\]"
+blackFg="\[\e[30m\]"
+whiteFg="\[\e[37m\]"
+
+
+# Reset
+fmtReset="\[\e[0m\]"
+
+systemBg="\[\e[48;5;237m\]"
+systemFg="\[\e[38;5;237m\]"
+
+nameBg="\[\e[48;5;248m\]"
+nameFg="\[\e[38;5;248m\]"
+
+# Colors and Nerd Font icons
+redFg="\[\e[38;5;203;48;5;238m\]"
+greenFg="\[\033[032m\]"
+yellowFg="\[\033[033m\]"
+blueFg="\[\e[38;5;75m\]"
+
+gitBg="\[\e[48;5;238m\]"
+gitFg="\[\e[38;5;238m\]"
+
+purpleFg="\[\033[035m\]"
+cyanFg="\[\033[0;36m\]"
+reset="\[\033[0m\]"
+
+gitBranchIcon=""  # Icon for branch
+gitModifiedIcon=""  # Icon for modified files
+gitUntrackedIcon=""  # Icon for untracked files
+gitStagedIcon=""  # Icon for staged files
+
+# Function to get Git information
+gitInfo() {
+  # Quick check if current directory is a Git repository
+  git rev-parse --is-inside-work-tree &>/dev/null || return
+  branch=$(git symbolic-ref --short HEAD 2>/dev/null || git describe --tags --exact-match 2>/dev/null)
+  
+  if [ -n "$branch" ]; then
+    status=$(git status --porcelain 2>/dev/null)
+    staged=0
+    modified=0
+    untracked=0
+
+    while IFS= read -r line; do
+      case "$line" in
+        " M"*) modified=$((modified+1)) ;;
+        "M "*) staged=$((staged+1)) ;;
+        "??"*) untracked=$((untracked+1)) ;;
+      esac
+    done <<< "$status"
+
+    gitPrompt="$reset $gitFg $gitBg$blueFg $gitBranchIcon \[\e[38;5;254m\]$branch"
+    [ $staged -gt 0 ] && gitPrompt+=" $gitBg$greenFg $gitStagedIcon \[\e[38;5;254m\]$staged"
+    [ $modified -gt 0 ] && gitPrompt+=" $gitBg$yellowFg $gitModifiedIcon \[\e[38;5;254m\]$modified"
+    [ $untracked -gt 0 ] && gitPrompt+=" $gitBg$redFg $gitUntrackedIcon \[\e[38;5;254m\]$untracked"
+    gitPrompt+=" $reset$gitFg$reset"
+
+    echo -e "$gitPrompt"
+  fi
+}
+
+# Function to customize the Bash prompt
+setPrompt() {
+  local gitPrompt
+  gitPrompt=$(gitInfo)
+
+  # One line PS1
+  if [[ -n $CHROME_DESKTOP ]]; then
+    PS1="$systemBg$blueFg \u@\h $systemFg$blueBg $blackFg$blueBg\w $fmtReset$blueFg$gitBg$gitPrompt$reset$gitFg$reset \n\$ "
+  else
+    PS1="$blue2Fg╭─\[\e[38;5;31m\]\[\e[97;48;5;31m\] \[\e[38;5;31;48;5;24m\]\[\e[97m\] \u \[\e[38;5;24;48;5;238m\]\[\e[38;5;254m\] \w \[\e[0;38;5;238m\]$gitBg$gitPrompt$reset\[\e[0m\]\n$blue2Fg╰─ ❯ "
+  fi
+}
+
+# Set the PROMPT_COMMAND to call setPrompt
+PROMPT_COMMAND=setPrompt
+
+
 
 # bleopt prompt_ps1_final="\D{%H:%M:%S}  "
 # bleopt prompt_ps1_transient=trim
@@ -159,7 +241,7 @@ ble/function#advice around ble/prompt/update 'prompt_unit="" ble/function#advice
 ## "prompt_rps1_final" if it has a non-empty value, or otherwise, the right
 ## prompt vanishes if "prompt_rps1_transient" is set to a non-empty value,
 
-#bleopt prompt_rps1='\w'
+bleopt prompt_rps1='\[\e[38;5;245m\]\t'
 #bleopt prompt_rps1_final=
 #bleopt prompt_rps1_transient=''
 
@@ -280,7 +362,7 @@ bleopt exec_errexit_mark=$'\e[91m[exit=%d]\e[m'
 ## history is shared with the other Bash ble.sh sessions with the history
 ## sharing turned on.
 
-bleopt history_share=1
+#bleopt history_share=
 
 
 ## This option controls the target range in the command history for
@@ -488,6 +570,7 @@ bleopt grapheme_cluster=extended
 
 #bleopt decode_abort_char=28
 
+
 ## The following settings sets up the behavior for errors while user input
 ## decoding. "error_char" is the decoding error for the current character
 ## encoding. "error_cseq" indicates the unrecognized CSI sequences.
@@ -507,10 +590,12 @@ bleopt grapheme_cluster=extended
 #bleopt decode_error_kseq_vbell=1
 #bleopt decode_error_kseq_discard=1
 
+
 ## This variable sets the limit to the count of recursive calls of keyboard
 ## macros.
 
 #bleopt decode_macro_limit=1024
+
 
 ## When a non-empty value is specified to this settings, the terminal's
 ## Bracketed Paste Mode (DEC mode 2004) is enabled.  This setting is
@@ -527,7 +612,7 @@ bleopt grapheme_cluster=extended
 ## functionality is inactive.
 
 #bleopt complete_auto_complete=1
-bleopt complete_menu_complete=
+#bleopt complete_menu_complete=1
 #bleopt complete_menu_filter=1
 
 
@@ -579,6 +664,7 @@ bleopt complete_auto_delay=300
 
 #bleopt complete_auto_wordbreaks=$' \t\n/'
 
+
 ## The setting "complete_auto_complete_opts" is a colon-separated list of
 ## options:
 ##
@@ -598,12 +684,14 @@ bleopt complete_auto_delay=300
 
 #bleopt complete_auto_menu=500
 
+
 ## When there are user inputs while generating completion candidates, the
 ## candidates generation will be canceled to process the user inputs. The
 ## following setting controls the interval of checking user inputs while
 ## generating completion candidates.
 
 #bleopt complete_polling_cycle=50
+
 
 ## A hint on the maximum acceptable size of any data structure generated during
 ## the completion process, beyond which the completion may be prematurely
@@ -617,6 +705,7 @@ bleopt complete_auto_delay=300
 #bleopt complete_limit_auto=200
 #bleopt complete_limit_auto_menu=100
 
+
 ## The following setting controls the timeout for the pathname expansions
 ## performed in auto-complete.  When the word contains a glob pattern that
 ## takes a long time to evaluate the pathname expansion, auto-complete based on
@@ -626,6 +715,7 @@ bleopt complete_auto_delay=300
 
 #bleopt complete_timeout_auto=5000
 
+
 ## The following setting controls the timeout for the pathname expansions to
 ## prepare COMP_WORDS and COMP_LINE for progcomp.  When the word contains a
 ## glob pattern that takes a long time to evaluate, the pathname expansion is
@@ -634,6 +724,7 @@ bleopt complete_auto_delay=300
 ## When the value is empty, the timeout is disabled.
 
 #bleopt complete_timeout_compvar=200
+
 
 ## The following setting specifies the style of the menu to show completion
 ## candidates. The value "dense" and "dense-nowrap" shows candidates separated
@@ -646,6 +737,7 @@ bleopt complete_auto_delay=300
 ## interprets ANSI escape sequences in the descriptions.
 
 #bleopt complete_menu_style=align-nowrap
+
 
 ## When a non-empty value is specified to this setting, the matching text on
 ## the right of the cursor is removed on the insertion of the completion.  This

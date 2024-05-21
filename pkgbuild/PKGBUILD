@@ -9,8 +9,7 @@ depends=('fzf'
     'grc'
     'ripgrep'
     'ttf-meslo-nerd-font-powerlevel10k'
-    'ttf-nerd-fonts-symbols-with-biglinux'
-    'oh-my-posh')
+    'ttf-nerd-fonts-symbols-with-biglinux')
 # makedepends=('')
 # conflicts=('')
 pkgver=$(date +%y.%m.%d)
