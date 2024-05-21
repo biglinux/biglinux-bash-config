@@ -147,32 +147,6 @@ bleopt history_lazyload=1
 ## "prompt_ps1_transient" is effective only when the current working directory
 ## did not change since the last command line.
 
-blueBg="\[\e[44m\]"
-blueFg="\[\e[34m\]"
-
-blackFg="\[\e[30m\]"
-whiteFg="\[\e[37m\]"
-
-# Reset
-fmtReset="\[\e[0m\]"
-
-systemBg="\[\e[48;5;237m\]"
-systemFg="\[\e[38;5;237m\]"
-
-nameBg="\[\e[48;5;248m\]"
-nameFg="\[\e[38;5;248m\]"
-
-# one line PS1
-if [[ -n $CHROME_DESKTOP ]]; then
-    PS1="$systemBg$blueFg \u@\h $systemFg$blueBg $blackFg$blueBg\w $fmtReset$blueFg$fmtReset "
-else
-    PS1="$systemBg$blueFg   $systemFg$blueBg $blackFg$blueBg\w $fmtReset$blueFg$fmtReset "
-fi
-
-
-# two lines PS1
-# PS1="\n$systemBg$blueFg   \u $systemFg$blueBg $blackFg$blueBg\w $fmtReset$blueFg$fmtReset\n$systemBg$whiteFg  $systemFg$fmtReset$systemFg "
-
 # bleopt prompt_ps1_final="\D{%H:%M:%S}  "
 # bleopt prompt_ps1_transient=trim
 
@@ -306,7 +280,7 @@ bleopt exec_errexit_mark=$'\e[91m[exit=%d]\e[m'
 ## history is shared with the other Bash ble.sh sessions with the history
 ## sharing turned on.
 
-#bleopt history_share=
+bleopt history_share=1
 
 
 ## This option controls the target range in the command history for
@@ -514,7 +488,6 @@ bleopt grapheme_cluster=extended
 
 #bleopt decode_abort_char=28
 
-
 ## The following settings sets up the behavior for errors while user input
 ## decoding. "error_char" is the decoding error for the current character
 ## encoding. "error_cseq" indicates the unrecognized CSI sequences.
@@ -534,12 +507,10 @@ bleopt grapheme_cluster=extended
 #bleopt decode_error_kseq_vbell=1
 #bleopt decode_error_kseq_discard=1
 
-
 ## This variable sets the limit to the count of recursive calls of keyboard
 ## macros.
 
 #bleopt decode_macro_limit=1024
-
 
 ## When a non-empty value is specified to this settings, the terminal's
 ## Bracketed Paste Mode (DEC mode 2004) is enabled.  This setting is
@@ -608,7 +579,6 @@ bleopt complete_auto_delay=300
 
 #bleopt complete_auto_wordbreaks=$' \t\n/'
 
-
 ## The setting "complete_auto_complete_opts" is a colon-separated list of
 ## options:
 ##
@@ -628,14 +598,12 @@ bleopt complete_auto_delay=300
 
 #bleopt complete_auto_menu=500
 
-
 ## When there are user inputs while generating completion candidates, the
 ## candidates generation will be canceled to process the user inputs. The
 ## following setting controls the interval of checking user inputs while
 ## generating completion candidates.
 
 #bleopt complete_polling_cycle=50
-
 
 ## A hint on the maximum acceptable size of any data structure generated during
 ## the completion process, beyond which the completion may be prematurely
@@ -649,7 +617,6 @@ bleopt complete_auto_delay=300
 #bleopt complete_limit_auto=200
 #bleopt complete_limit_auto_menu=100
 
-
 ## The following setting controls the timeout for the pathname expansions
 ## performed in auto-complete.  When the word contains a glob pattern that
 ## takes a long time to evaluate the pathname expansion, auto-complete based on
@@ -659,7 +626,6 @@ bleopt complete_auto_delay=300
 
 #bleopt complete_timeout_auto=5000
 
-
 ## The following setting controls the timeout for the pathname expansions to
 ## prepare COMP_WORDS and COMP_LINE for progcomp.  When the word contains a
 ## glob pattern that takes a long time to evaluate, the pathname expansion is
@@ -668,7 +634,6 @@ bleopt complete_auto_delay=300
 ## When the value is empty, the timeout is disabled.
 
 #bleopt complete_timeout_compvar=200
-
 
 ## The following setting specifies the style of the menu to show completion
 ## candidates. The value "dense" and "dense-nowrap" shows candidates separated
@@ -681,7 +646,6 @@ bleopt complete_auto_delay=300
 ## interprets ANSI escape sequences in the descriptions.
 
 #bleopt complete_menu_style=align-nowrap
-
 
 ## When a non-empty value is specified to this setting, the matching text on
 ## the right of the cursor is removed on the insertion of the completion.  This
