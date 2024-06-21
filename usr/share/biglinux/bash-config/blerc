@@ -172,6 +172,11 @@ blueFg="\[\e[38;5;75m\]"
 gitBg="\[\e[48;5;238m\]"
 gitFg="\[\e[38;5;238m\]"
 
+virtualEnvBg="\[\e[48;5;239m\]"
+virtualEnvFg="\[\e[38;5;239m\]"
+
+yellowFg="\[\033[33m\]"
+
 purpleFg="\[\033[035m\]"
 cyanFg="\[\033[0;36m\]"
 reset="\[\033[0m\]"
@@ -216,11 +221,15 @@ setPrompt() {
   local gitPrompt
   gitPrompt=$(gitInfo)
 
+  if [[ -n $VIRTUAL_ENV ]]; then
+    ps1_virtual_env="$reset $virtualEnvFg $virtualEnvBg$yellowFg  \[\e[38;5;254m\]$VIRTUAL_ENV $reset$virtualEnvFg$reset"
+  fi
+  
   # One line PS1
   if [[ -n $CHROME_DESKTOP ]]; then
-    PS1="$systemBg$blueFg \u@\h $systemFg$blueBg $blackFg$blueBg\w $fmtReset$blueFg$gitBg$gitPrompt$reset$gitFg$reset \n\$ "
+    PS1="$systemBg$blueFg \u@\h $systemFg$blueBg $blackFg$blueBg\w $fmtReset$blueFg$gitBg$gitPrompt$reset$gitFg$reset$ps1_virtual_env \n\$ "
   else
-    PS1="$blue2Fg╭─\[\e[38;5;31m\]\[\e[97;48;5;31m\] \[\e[38;5;31;48;5;24m\]\[\e[97m\] \u \[\e[38;5;24;48;5;238m\]\[\e[38;5;254m\] \w \[\e[0;38;5;238m\]$gitBg$gitPrompt$reset\[\e[0m\]\n$blue2Fg╰─ ❯ "
+    PS1="$blue2Fg╭─\[\e[38;5;31m\]\[\e[97;48;5;31m\] \[\e[38;5;31;48;5;24m\]\[\e[97m\] \u \[\e[38;5;24;48;5;238m\]\[\e[38;5;254m\] \w \[\e[0;38;5;238m\]$gitBg$gitPrompt$reset$ps1_virtual_env\[\e[0m\]\n$blue2Fg╰─ ❯ "
   fi
 }
 
