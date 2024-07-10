@@ -137,15 +137,21 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
 # FZF Configuration
-# if [ -f /usr/share/fzf/key-bindings.bash ]; then
-#     _ble_contrib_fzf_base=/usr/share/fzf/
-#     . /usr/share/fzf/completion.bash
-#     . /usr/share/fzf/key-bindings.bash
-# fi
+if [ -f /usr/share/fzf/key-bindings.bash ]; then
+    . /usr/share/fzf/completion.bash
+    . /usr/share/fzf/key-bindings.bash
+fi
 
 # Attach Blesh with oh my posh if available
 if [[ ${BLE_VERSION-} ]]; then
-    #eval "$(oh-my-posh init bash --config /usr/share/biglinux/bash-config/oh-my-posh.json)"
+
+    # FZF Configuration
+    if [ -f /usr/share/fzf/key-bindings.bash ]; then
+        _ble_contrib_fzf_base=/usr/share/fzf/
+        ble-import -d integration/fzf-completion
+        ble-import -d integration/fzf-key-bindings
+    fi
+
     ble-attach
 else
     # tty
