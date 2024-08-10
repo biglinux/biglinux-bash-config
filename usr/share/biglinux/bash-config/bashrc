@@ -20,6 +20,8 @@ if [ -x /usr/bin/dircolors ]; then
     alias dir='dir --color=auto'
     alias vdir='vdir --color=auto'
     alias grep='grep --color=auto'
+    # Fix other writable color
+    LS_COLORS+=':ow=01;33'
 fi
 
 # # Complete substitution of the ls command with exa
