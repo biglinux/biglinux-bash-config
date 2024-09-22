@@ -40,54 +40,86 @@ alias l='ls -CF'
 # Load Blesh for enhanced interactive shell experience
 if [[ -f /usr/share/blesh/ble.sh ]] && [[ ! -f ~/.bash-normal ]] && [[ $TERM != linux ]]; then
     source /usr/share/blesh/ble.sh --noattach
-    #GRC Configuration for colorizing command outputs
-    #GRC_ALIASES=true
-    #GRC="/usr/bin/grc"
-    #if tty -s && [ -n "$TERM" ] && [ "$TERM" != "dumb" ] && [ -n "$GRC" ]; then
-    #    alias colourify="$GRC -es"
-    #    alias blkid='colourify blkid'
-    #    alias configure='colourify ./configure'
-    #    alias df='colourify df'
-    #    alias diff='colourify diff'
-    #    alias docker='colourify docker'
-    #    alias docker-compose='colourify docker-compose'
-    #    alias docker-machine='colourify docker-machine'
-    #    alias du='colourify du'
-    #    alias env='colourify env'
-    #    alias free='colourify free'
-    #    alias fdisk='colourify fdisk'
-    #    alias findmnt='colourify findmnt'
-    #    alias make='colourify make'
-    #    alias gcc='colourify gcc'
-    #    alias g++='colourify g++'
-    #    alias id='colourify id'
-    #    alias ip='colourify ip'
-    #    alias iptables='colourify iptables'
-    #    alias as='colourify as'
-    #    alias gas='colourify gas'
-    #    # alias journalctl='colourify journalctl'
-    #    alias kubectl='colourify kubectl'
-    #    alias ld='colourify ld'
-    #    # alias ls='colourify ls'
-    #    alias lsof='colourify lsof'
-    #    alias lsblk='colourify lsblk'
-    #    alias lspci='colourify lspci'
-    #    alias netstat='colourify netstat'
-    #    alias ping='colourify ping'
-    #    alias ss='colourify ss'
-    #    alias traceroute='colourify traceroute'
-    #    alias traceroute6='colourify traceroute6'
-    #    alias head='colourify head'
-    #    alias tail='colourify tail'
-    #    alias dig='colourify dig'
-    #    alias mount='colourify mount'
-    #    alias ps='colourify ps'
-    #    alias mtr='colourify mtr'
-    #    alias semanage='colourify semanage'
-    #    alias getsebool='colourify getsebool'
-    #    alias ifconfig='colourify ifconfig'
-    #    alias sockstat='colourify sockstat'
-    #fi
+
+    #GRC-RS Configuration for colorizing command outputs
+    GRC_ALIASES=true
+    GRC="/usr/bin/grc-rs"
+    if tty -s && [ -n "$TERM" ] && [ "$TERM" != "dumb" ] && [ -n "$GRC" ]; then
+        alias colourify="$GRC"
+        alias ant='colourify ant'
+        alias blkid='colourify blkid'
+        alias configure='colourify configure'
+        alias df='colourify df'
+        alias diff='colourify diff'
+        alias dig='colourify dig'
+        alias dnf='colourify dnf'
+        alias docker-machinels='colourify docker-machinels'
+        alias dockerimages='colourify dockerimages'
+        alias dockerinfo='colourify dockerinfo'
+        alias dockernetwork='colourify dockernetwork'
+        alias dockerps='colourify dockerps'
+        alias dockerpull='colourify dockerpull'
+        alias dockersearch='colourify dockersearch'
+        alias dockerversion='colourify dockerversion'
+        alias du='colourify du'
+        alias dummy='colourify dummy'
+        alias env='colourify env'
+        alias esperanto='colourify esperanto'
+        alias fdisk='colourify fdisk'
+        alias findmnt='colourify findmnt'
+        alias getfacl='colourify getfacl'
+        alias getsebool='colourify getsebool'
+        alias go-test='colourify go-test'
+        alias id='colourify id'
+        alias ifconfig='colourify ifconfig'
+        alias iostat_sar='colourify iostat_sar'
+        alias ip='colourify ip'
+        alias ipaddr='colourify ipaddr'
+        alias ipneighbor='colourify ipneighbor'
+        alias iproute='colourify iproute'
+        alias iptables='colourify iptables'
+        alias irclog='colourify irclog'
+        alias iwconfig='colourify iwconfig'
+        alias jobs='colourify jobs'
+        alias kubectl='colourify kubectl'
+        alias last='colourify last'
+        alias ldap='colourify ldap'
+        alias log='colourify log'
+        alias lolcat='colourify lolcat'
+        alias lsattr='colourify lsattr'
+        alias lsblk='colourify lsblk'
+        alias lsmod='colourify lsmod'
+        alias lsof='colourify lsof'
+        alias lspci='colourify lspci'
+        alias lsusb='colourify lsusb'
+        alias mount='colourify mount'
+        alias mtr='colourify mtr'
+        alias mvn='colourify mvn'
+        alias netstat='colourify netstat'
+        alias nmap='colourify nmap'
+        alias ntpdate='colourify ntpdate'
+        alias ping='colourify ping'
+        alias ping2='colourify ping2'
+        alias proftpd='colourify proftpd'
+        alias pv='colourify pv'
+        alias semanageboolean='colourify semanageboolean'
+        alias semanagefcontext='colourify semanagefcontext'
+        alias semanageuser='colourify semanageuser'
+        alias sensors='colourify sensors'
+        alias showmount='colourify showmount'
+        alias sockstat='colourify sockstat'
+        alias ss='colourify ss'
+        alias stat='colourify stat'
+        alias sysctl='colourify sysctl'
+        alias tcpdump='colourify tcpdump'
+        alias traceroute='colourify traceroute'
+        alias tune2fs='colourify tune2fs'
+        alias ulimit='colourify ulimit'
+        alias uptime='colourify uptime'
+        alias vmstat='colourify vmstat'
+        alias wdiff='colourify wdiff'
+        alias yaml='colourify yaml'
+    fi
 
     # Color settings for GCC outputs
     export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
@@ -96,20 +128,6 @@ if [[ -f /usr/share/blesh/ble.sh ]] && [[ ! -f ~/.bash-normal ]] && [[ $TERM != 
     if [ -f /usr/bin/bat ]; then
         alias cat='bat --paging=never --style=plain'
     fi
-
-    # eza Configuration for enhanced directory listings
-    # if [ -f /usr/bin/eza ]; then
-    #     alias ls='eza --icons --group-directories-first'                               # ls
-    #     alias l='eza -lbF --git --icons--group-directories-first'                      # list, size, type, git
-    #     alias ll='eza -lbGF --git --icons--group-directories-first'                    # long list
-    #     alias llm='eza -lbGF --git --sort=modified --icons'                            # long list, modified date sort
-    #     alias la='eza -lbhHigUmuSa --time-style=long-iso --git --color-scale --icons'  # all list
-    #     alias lx='eza -lbhHigUmuSa@ --time-style=long-iso --git --color-scale --icons' # all + extended list
-    # 
-    #     # speciality views
-    #     alias lS='eza -1 --icons'			                                            # one column, just names
-    #     alias lt='eza --tree --level=2 --icons'                                         # tree
-    # fi
 fi
 
 # ----- History Configuration -----
