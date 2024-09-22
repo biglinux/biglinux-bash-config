@@ -129,25 +129,24 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
+# Auto completion Configuration
+if ! shopt -oq posix; then
+    if [ -f /usr/share/bash-completion/bash_completion ]; then
+        . /usr/share/bash-completion/bash_completion
+    elif [ -f /etc/bash_completion ]; then
+        . /etc/bash_completion
+    fi
+fi
+
 # FZF Configuration
 if [ -f /usr/share/fzf/key-bindings.bash ]; then
-    . /usr/share/fzf/completion.bash
-    . /usr/share/fzf/key-bindings.bash
+    eval "$(fzf --bash)"
     # using ripgrep combined with preview
     # find-in-file - usage: fif <searchTerm>
     fif() {
     if [ ! "$#" -gt 0 ]; then echo "Need a string to search for!"; return 1; fi
     fzf --preview "highlight -O ansi -l {} 2> /dev/null | rga --ignore-case --pretty --context 10 '$1' {}" < <(rga --files-with-matches --no-messages "$1")
     }
-else
-    # Auto completion Configuration
-    if ! shopt -oq posix; then
-    if [ -f /usr/share/bash-completion/bash_completion ]; then
-        . /usr/share/bash-completion/bash_completion
-    elif [ -f /etc/bash_completion ]; then
-        . /etc/bash_completion
-    fi
-    fi
 fi
 
 # Attach Blesh with oh my posh if available
@@ -156,8 +155,6 @@ if [[ ${BLE_VERSION-} ]]; then
     # FZF Configuration
     if [ -f /usr/share/fzf/key-bindings.bash ]; then
         _ble_contrib_fzf_base=/usr/share/fzf/
-        ble-import -d integration/fzf-completion
-        ble-import -d integration/fzf-key-bindings
     fi
 
     ble-attach

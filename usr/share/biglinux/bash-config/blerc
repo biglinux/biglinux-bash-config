@@ -664,7 +664,7 @@ bleopt complete_requote_threshold=-1
 ## The following setting controls the delay of auto-complete after the last
 ## user input. The unit is millisecond.
 
-bleopt complete_auto_delay=300
+bleopt complete_auto_delay=150
 
 
 ## The setting "complete_auto_wordbreaks" is used as the delimiters for
@@ -896,8 +896,7 @@ bleopt menu_align_max=150
 ## The setting "filename_ls_colors" can be used to import the filename coloring
 ## scheme by the environment variable LS_COLORS.
 
-#bleopt filename_ls_colors="$LS_COLORS"
-
+bleopt filename_ls_colors="$LS_COLORS"
 
 ## The following settings enable or disable the syntax highlighting.  When the
 ## setting "highlight_syntax" has a non-empty value, the syntax highlighting is
