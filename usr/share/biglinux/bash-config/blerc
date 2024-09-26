@@ -190,22 +190,20 @@ gitStagedIcon=""  # Icon for staged files
 gitInfo() {
   # Quick check if current directory is a Git repository
   git rev-parse --is-inside-work-tree &>/dev/null || return
+
+  # Get branch and status in one shot using plumbing commands for speed
   branch=$(git symbolic-ref --short HEAD 2>/dev/null || git describe --tags --exact-match 2>/dev/null)
   
   if [ -n "$branch" ]; then
-    status=$(git status --porcelain 2>/dev/null)
-    staged=0
-    modified=0
-    untracked=0
+    # Only one call to git status --porcelain=v2 and parse the results efficiently
+    status=$(git status --porcelain=v2 2>/dev/null)
+    
+    # Using grep and wc to count staged, modified, and untracked files
+    staged=$(echo "$status" | grep "^1 .M" | wc -l)
+    modified=$(echo "$status" | grep "^1 M" | wc -l)
+    untracked=$(echo "$status" | grep "^? " | wc -l)
 
-    while IFS= read -r line; do
-      case "$line" in
-        " M"*) modified=$((modified+1)) ;;
-        "M "*) staged=$((staged+1)) ;;
-        "??"*) untracked=$((untracked+1)) ;;
-      esac
-    done <<< "$status"
-
+    # Building the Git prompt
     gitPrompt="$reset $gitFg $gitBg$blueFg $gitBranchIcon \[\e[38;5;254m\]$branch"
     [ $staged -gt 0 ] && gitPrompt+=" $gitBg$greenFg $gitStagedIcon \[\e[38;5;254m\]$staged"
     [ $modified -gt 0 ] && gitPrompt+=" $gitBg$yellowFg $gitModifiedIcon \[\e[38;5;254m\]$modified"
