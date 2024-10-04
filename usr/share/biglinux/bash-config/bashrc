@@ -24,14 +24,6 @@ if [ -x /usr/bin/dircolors ]; then
     LS_COLORS+=':ow=01;33'
 fi
 
-# # Complete substitution of the ls command with exa
-# alias ls='exa'
-
-# # Redefine ls options to exa equivalents
-# alias ll='exa -l'
-# alias la='exa -a'
-# alias l='exa -F'
-
 # # More ls aliases
 alias ll='ls -l'
 alias la='ls -A'
@@ -40,7 +32,7 @@ alias l='ls -CF'
 # Load Blesh for enhanced interactive shell experience
 if [[ -f /usr/share/blesh/ble.sh ]] && [[ ! -f ~/.bash-normal ]] && [[ $TERM != linux ]]; then
     source /usr/share/blesh/ble.sh --noattach
-
+    
     #GRC-RS Configuration for colorizing command outputs
     GRC_ALIASES=true
     GRC="/usr/bin/grc-rs"
@@ -62,15 +54,9 @@ if [[ -f /usr/share/blesh/ble.sh ]] && [[ ! -f ~/.bash-normal ]] && [[ $TERM != 
         alias dockersearch='colourify dockersearch'
         alias dockerversion='colourify dockerversion'
         alias du='colourify du'
-        alias dummy='colourify dummy'
-        alias env='colourify env'
-        alias esperanto='colourify esperanto'
         alias fdisk='colourify fdisk'
         alias findmnt='colourify findmnt'
-        alias getfacl='colourify getfacl'
-        alias getsebool='colourify getsebool'
         alias go-test='colourify go-test'
-        alias id='colourify id'
         alias ifconfig='colourify ifconfig'
         alias iostat_sar='colourify iostat_sar'
         alias ip='colourify ip'
@@ -83,7 +69,6 @@ if [[ -f /usr/share/blesh/ble.sh ]] && [[ ! -f ~/.bash-normal ]] && [[ $TERM != 
         alias kubectl='colourify kubectl'
         alias last='colourify last'
         alias ldap='colourify ldap'
-        alias log='colourify log'
         alias lolcat='colourify lolcat'
         alias lsattr='colourify lsattr'
         alias lsblk='colourify lsblk'
@@ -168,12 +153,6 @@ fi
 
 # Attach Blesh with oh my posh if available
 if [[ ${BLE_VERSION-} ]]; then
-
-    # FZF Configuration
-    if [ -f /usr/share/fzf/key-bindings.bash ]; then
-        _ble_contrib_fzf_base=/usr/share/fzf/
-    fi
-
     ble-attach
 else
     # tty
@@ -200,4 +179,3 @@ else
         PS1="$systemBg$greenFg   $systemFg$greenBg $blackFg$greenBg\w $fmtReset$greenFg$fmtReset "
     fi
 fi
-
