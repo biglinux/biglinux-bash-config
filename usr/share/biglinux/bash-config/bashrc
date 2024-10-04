@@ -80,7 +80,6 @@ if [[ -f /usr/share/blesh/ble.sh ]] && [[ ! -f ~/.bash-normal ]] && [[ $TERM != 
         alias iptables='colourify iptables'
         alias irclog='colourify irclog'
         alias iwconfig='colourify iwconfig'
-        alias jobs='colourify jobs'
         alias kubectl='colourify kubectl'
         alias last='colourify last'
         alias ldap='colourify ldap'
