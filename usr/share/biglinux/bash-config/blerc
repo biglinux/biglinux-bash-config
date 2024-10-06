@@ -416,7 +416,7 @@ bleopt exec_errexit_mark=$'\e[91m[exit=%d]\e[m'
 ## number of characters.  The number 0 or negative numbers means the unlimited
 ## capacity.
 
-#bleopt line_limit_length=10000
+bleopt line_limit_length=300
 
 
 ## The following option specifies the maximal number of characters which can be
@@ -1064,12 +1064,11 @@ function blerc/emacs-load-hook {
 
   #bleopt prompt_emacs_mode_indicator='\q{keymap:emacs/mode-indicator}'
 
-
   ## The following option specifies the multiline mode name used in the prompt
   ## sequence \q{keymap:emacs/mode-indicator} in the multiline editing mode.
 
   # default
-  #bleopt keymap_emacs_mode_string_multiline=$'\e[1m-- MULTILINE --\e[m'
+  bleopt keymap_emacs_mode_string_multiline=$'\e[1m-- Press Ctrl + J to execute or Ctrl + C to cancel --\e[m'
   # do not show the mode name
   #bleopt keymap_emacs_mode_string_multiline=
 
