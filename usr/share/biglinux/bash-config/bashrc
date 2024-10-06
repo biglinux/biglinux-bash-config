@@ -154,6 +154,10 @@ fi
 # Attach Blesh with oh my posh if available
 if [[ ${BLE_VERSION-} ]]; then
     ble-attach
+    # FZF Configuration
+    if [ -f /usr/share/fzf/key-bindings.bash ]; then
+        _ble_contrib_fzf_base=/usr/share/fzf/
+    fi
 else
     # tty
     if [[ $TERM = linux ]]; then
