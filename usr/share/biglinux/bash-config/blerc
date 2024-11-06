@@ -223,7 +223,7 @@ setPrompt() {
     ps1_virtual_env="$reset $virtualEnvFg $virtualEnvBg$yellowFg  \[\e[38;5;254m\]$VIRTUAL_ENV $reset$virtualEnvFg$reset"
   fi
   
-  PS1="$blue2Fg╭─\[\e[38;5;31m\]\[\e[48;5;31m\] \[\e[38;5;31;48;5;24m\]\[\e[97m\] \u \[\e[38;5;24;48;5;238m\]\[\e[38;5;254m\] \w \[\e[0;38;5;238m\]$gitBg$gitPrompt$reset \[\e[38;5;245m\] \t$ps1_virtual_env\[\e[0m\]\n$blue2Fg╰─ ❯ "
+  PS1="$blue2Fg╭─\[\e[38;5;31m\]\[\e[48;5;31m\] \[\e[38;5;31;48;5;24m\]\[\e[97m\] \u \[\e[38;5;24;48;5;238m\]\[\e[38;5;254m\] \w \[\e[0;38;5;238m\]$gitBg$gitPrompt$ps1_virtual_env$reset \[\e[38;5;245m\] \t\[\e[0m\]\n$blue2Fg╰─ ❯ "
 }
 
 # Set the PROMPT_COMMAND to call setPrompt
