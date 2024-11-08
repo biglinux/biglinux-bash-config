@@ -127,6 +127,14 @@ if [[ -f /usr/share/blesh/ble.sh ]] && [[ ! -f ~/.bash-normal ]] && [[ $TERM != 
                 bat --paging=never --style=plain "$@"
             fi
         }
+        # Use help command for get command --help with colors
+        help() {
+            if [ $# -eq 0 ]; then
+                command help
+            else
+                "$@" --help 2>&1 | bat --paging=never --style=plain --language=help
+            fi
+        }
     fi
     
 fi
