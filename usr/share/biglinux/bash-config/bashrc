@@ -110,8 +110,26 @@ if [[ -f /usr/share/blesh/ble.sh ]] && [[ ! -f ~/.bash-normal ]] && [[ $TERM != 
 
     # Use bat for cat if available
     if [ -f /usr/bin/bat ]; then
-        alias cat='bat --paging=never --style=plain'
+        cat() {
+            local use_cat=false
+            # Check if any argument contains -v, -e, -t or their combinations
+            for arg in "$@"; do
+                if [[ "$arg" =~ ^-[vet]+$ ]]; then
+                    use_cat=true
+                    break
+                fi
+            done
+            
+            echo "$use_cat"
+            # If no special options, use bat
+            if [ "$use_cat" == true ]; then
+                command cat "$@"
+            else
+                bat --paging=never --style=plain "$@"
+            fi
+        }
     fi
+    
 fi
 
 # ----- History Configuration -----
