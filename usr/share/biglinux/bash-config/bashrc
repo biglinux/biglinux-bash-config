@@ -120,7 +120,6 @@ if [[ -f /usr/share/blesh/ble.sh ]] && [[ ! -f ~/.bash-normal ]] && [[ $TERM != 
                 fi
             done
             
-            echo "$use_cat"
             # If no special options, use bat
             if [ "$use_cat" == true ]; then
                 command cat "$@"
