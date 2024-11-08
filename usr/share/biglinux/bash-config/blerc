@@ -278,6 +278,7 @@ ble/function#advice around ble/prompt/update 'prompt_unit="" ble/function#advice
 ## sequences.
 
 #bleopt prompt_eol_mark=$'\e[94m[ble: EOF]\e[m'
+bleopt prompt_eol_mark=""
 
 
 ## "prompt_ruler" specifies the ruler between the previous command and the
