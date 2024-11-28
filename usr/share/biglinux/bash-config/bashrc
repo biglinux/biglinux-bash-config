@@ -184,27 +184,10 @@ if [[ ${BLE_VERSION-} ]]; then
         _ble_contrib_fzf_base=/usr/share/fzf/
     fi
 else
-    # tty
-    if [[ $TERM = linux ]]; then
+    if [ "$color_prompt" = yes ]; then
         PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
     else
-        # bash-normal
-        greenBg="\[\e[48;5;115m\]"
-        greenFg="\[\e[38;5;115m\]"
-
-        blackFg="\[\e[30m\]"
-        whiteFg="\[\e[37m\]"
-
-        # Reset
-        fmtReset="\[\e[0m\]"
-
-        systemBg="\[\e[48;5;237m\]"
-        systemFg="\[\e[38;5;237m\]"
-
-        nameBg="\[\e[48;5;248m\]"
-        nameFg="\[\e[38;5;248m\]"
-
-        # one line PS1
-        PS1="$systemBg$greenFg   $systemFg$greenBg $blackFg$greenBg\w $fmtReset$greenFg$fmtReset "
+        PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
     fi
+    unset color_prompt force_color_prompt
 fi
