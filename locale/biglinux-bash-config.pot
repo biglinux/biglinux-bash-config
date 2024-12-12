@@ -11,18 +11,17 @@ msgstr  "Project-Id-Version: biglinux-bash-config\n"
         "Language-Team: LANGUAGE <LL@li.org>\n"
         "Language: \n"
         "MIME-Version: 1.0\n"
-        "Content-Type: text/plain; charset=UTF-8\n"
+        "Content-Type: text/plain; charset=CHARSET\n"
         "Content-Transfer-Encoding: 8bit\n"
 
-msgid   "Utilize uma das opções:"
+msgid   "Use one of the following options:"
 msgstr  ""
 
-msgid   "Bash + ble.sh + fzf e recursos para adicionar mais cores aos "
-        "resultados"
+msgid   "Bash + ble.sh + fzf and features for more colorful results"
 msgstr  ""
 
 msgid   "Bash + fzf"
 msgstr  ""
 
-msgid   "Zsh com diversos recursos inclusos"
+msgid   "Zsh with various included features"
 msgstr  ""

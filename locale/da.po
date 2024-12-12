@@ -16,14 +16,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: attranslate\n"
 
-msgid "Utilize uma das opções:"
-msgstr "Brug en af mulighederne:"
+msgid "Use one of the following options:"
+msgstr "Brug en af de følgende muligheder:"
 
-msgid "Bash + ble.sh + fzf e recursos para adicionar mais cores aos resultados"
-msgstr "Bash + ble.sh + fzf og funktioner til at tilføje flere farver til resultaterne"
+msgid "Bash + ble.sh + fzf and features for more colorful results"
+msgstr "Bash + ble.sh + fzf og funktioner for mere farverige resultater"
 
 msgid "Bash + fzf"
 msgstr "Bash + FZF"
 
-msgid "Zsh com diversos recursos inclusos"
-msgstr "Zsh med mange funktioner inkluderet"
+msgid "Zsh with various included features"
+msgstr "Zsh med forskellige inkluderede funktioner"

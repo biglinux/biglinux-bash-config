@@ -15,15 +15,14 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "Utilize uma das opções:"
-msgstr "Utilize uma das opções:"
+msgid "Use one of the following options:"
+msgstr "Use one of the following options:"
 
-msgid "Bash + ble.sh + fzf e recursos para adicionar mais cores aos resultados"
-msgstr ""
-"Bash + ble.sh + fzf e recursos para adicionar mais cores aos resultados"
+msgid "Bash + ble.sh + fzf and features for more colorful results"
+msgstr "Bash + ble.sh + fzf and features for more colorful results"
 
 msgid "Bash + fzf"
 msgstr "Bash + fzf"
 
-msgid "Zsh com diversos recursos inclusos"
-msgstr "Zsh com diversos recursos inclusos"
+msgid "Zsh with various included features"
+msgstr "Zsh with various included features"
