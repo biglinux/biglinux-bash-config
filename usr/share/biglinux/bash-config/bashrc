@@ -31,7 +31,7 @@ alias l='ls -CF'   # Classify entries and display directories with trailing slas
 
 # Load ble.sh for an enhanced interactive shell experience
 if [[ -f /usr/share/blesh/ble.sh ]] && [[ ! -f ~/.bash-normal ]] && [[ $TERM != linux ]]; then
-    source /usr/share/blesh/ble.sh --rcfile /etc/bigblerc
+    source /usr/share/blesh/ble.sh --noattach --rcfile /etc/bigblerc
     
     # ----- GRC-RS Configuration -----
     # Enable colorized output for various commands
