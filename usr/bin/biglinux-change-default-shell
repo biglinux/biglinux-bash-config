@@ -1,49 +1,65 @@
 #!/usr/bin/env bash
 
-#Translation
+# Translation configuration for localized messages
 export TEXTDOMAINDIR="/usr/share/locale"
 export TEXTDOMAIN=biglinux-bash-config
 
-
+# Function to create a backup of a file and copy the new file to the destination
 backup_and_copy() {
-    src=$1
-    dest=$2
+    src=$1  # Source file path
+    dest=$2 # Destination file path
 
+    # Check if the destination file exists
     if [[ -e $dest ]]; then
         counter=1
+        # Find the next available backup file name
         while [[ -e "${dest}.backup.${counter}" ]]; do
             ((counter++))
         done
 
+        # Create a backup
         cp "$dest" "${dest}.backup.${counter}"
         echo "Backup created: ${dest}.backup.${counter}."
     fi
 
+    # Force copy the source file to the destination
     cp -f "$src" "$dest"
 }
 
+# Function to set up an enhanced bash environment
 bash_power() {
+    # Backup and replace configuration files
     backup_and_copy "/usr/share/biglinux/bash-config/bashrc" "$HOME/.bashrc"
     backup_and_copy "/usr/share/biglinux/bash-config/blerc" "$HOME/.blerc"
-    backup_and_copy "/usr/share/biglinux/bash-config/pureline.conf" "$HOME/.pureline.conf"
+
+    # Update the default Konsole profile to Bash.profile
     sed -i 's|DefaultProfile=.*|DefaultProfile=Bash.profile|g' "$HOME/.config/konsolerc"
+
+    # Remove the marker for "normal" bash mode
     rm -f "$HOME/.bash-normal"
+
+    # Update Dolphin's default profile to Bash.profile
     kwriteconfig5 --file ~/.config/dolphinrc --group "Desktop Entry" --key DefaultProfile Bash.profile 
 }
 
+# Handle different input arguments
 if [[ "$1" = "bash-power" ]]; then
     bash_power
 elif [[ "$1" = "bash-normal" ]]; then
+    # If the .blerc file does not exist, set up bash-power first
     if [[ ! -e "$HOME/.blerc" ]]; then
         bash_power
     fi
+    # Mark the mode as "normal bash"
     echo 1 > "$HOME/.bash-normal"
 elif [[ "$1" = "zsh" ]]; then
+    # Update the default Konsole and Dolphin profiles to Zsh.profile
     sed -i 's|DefaultProfile=.*|DefaultProfile=Zsh.profile|g' "$HOME/.config/konsolerc"
     kwriteconfig5 --file ~/.config/dolphinrc --group "Desktop Entry" --key DefaultProfile Zsh.profile 
 else
-    echo $"Utilize uma das opções:"
-    echo "bash-power   - " $"Bash + ble.sh + fzf e recursos para adicionar mais cores aos resultados"
+    # Display usage instructions if no valid option is provided
+    echo $"Use one of the following options:"
+    echo "bash-power   - " $"Bash + ble.sh + fzf and features for more colorful results"
     echo "bash-normal  - " $"Bash + fzf"
-    echo "zsh          - " $"Zsh com diversos recursos inclusos"
+    echo "zsh          - " $"Zsh with various included features"
 fi
