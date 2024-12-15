@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# Change shortcut key from Ctrl + M to Ctrl + J
+sed -i 's|35mC-m|35mCtrl-m|g;s|35mC-j|35mCtrl-j|g' /usr/share/blesh/lib/keymap.emacs.sh
+
+# Modifies the bashrc of all users to include a blesh cache check.
+for user in $(awk -F':' '{ if ($3 >= 1000 && $1 != "nobody") print $1 }' /etc/passwd); do
+    # Define the .bashrc file
+    bashrc="/home/$user/.bashrc"
+
+    # Check if the content is already present
+    if ! grep -q "_bleCacheVersion=new" "$bashrc" && grep -q "ble-attach" "$bashrc"; then
+        # Insert the content directly before 'ble-attach' using sed
+        sed -i '/ble-attach/i \
+        # Fix if use old snapshot with new blesh cache\
+        if grep -q -m1 _ble_decode_hook ~/.cache/blesh/*/decode.bind.*.bind; then _bleCacheVersion=new; else _bleCacheVersion=old; fi\
+        if grep -q -m1 _ble_decode_hook /usr/share/blesh/lib/init-bind.sh; then _bleInstalledVersion=new; else _bleInstalledVersion=old; fi\
+        [[ $_bleInstalledVersion != $_bleCacheVersion ]] && rm ~/.cache/blesh/*/[dk]*' "$bashrc"
+    fi
+done

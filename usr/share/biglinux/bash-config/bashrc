@@ -182,6 +182,10 @@ fi
 
 # Attach ble.sh if loaded
 if [[ ${BLE_VERSION-} ]]; then
+    # Fix if use old snapshot with new blesh cache
+    if grep -q -m1 _ble_decode_hook ~/.cache/blesh/*/decode.bind.*.bind; then _bleCacheVersion=new; else _bleCacheVersion=old; fi
+    if grep -q -m1 _ble_decode_hook /usr/share/blesh/lib/init-bind.sh; then _bleInstalledVersion=new; else _bleInstalledVersion=old; fi
+    [[ $_bleInstalledVersion != $_bleCacheVersion ]] && rm ~/.cache/blesh/*/[dk]*
     ble-attach
     # FZF Configuration
     if [ -f /usr/share/fzf/key-bindings.bash ]; then

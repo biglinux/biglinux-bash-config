@@ -3,8 +3,9 @@ Type = Package
 Operation = Install
 Operation = Upgrade
 Target =  blesh-git
+Target =  biglinux-bash-config
 
 [Action]
 Description = Update blesh
 When = PostTransaction
-Exec = sed -i 's|35mC-m|35mCtrl-m|g;s|35mC-j|35mCtrl-j|g' /usr/share/blesh/lib/keymap.emacs.sh
+Exec = /usr/share/libalpm/scripts/biglinux-bash-config
