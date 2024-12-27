@@ -39,71 +39,24 @@ if [[ -f /usr/share/blesh/ble.sh ]] && [[ ! -f ~/.bash-normal ]] && [[ $TERM != 
     GRC="/usr/bin/grc-rs"
     if tty -s && [ -n "$TERM" ] && [ "$TERM" != "dumb" ] && [ -n "$GRC" ]; then
         alias colourify="$GRC"
-        alias ant='colourify ant'
-        alias blkid='colourify blkid'
-        alias configure='colourify configure'
-        alias df='colourify df'
-        alias diff='colourify diff'
-        alias dig='colourify dig'
-        alias dnf='colourify dnf'
-        alias docker-machinels='colourify docker-machinels'
-        alias dockerimages='colourify dockerimages'
-        alias dockerinfo='colourify dockerinfo'
-        alias dockernetwork='colourify dockernetwork'
-        alias dockerps='colourify dockerps'
-        alias dockerpull='colourify dockerpull'
-        alias dockersearch='colourify dockersearch'
-        alias dockerversion='colourify dockerversion'
-        alias du='colourify du'
-        alias fdisk='colourify fdisk'
-        alias findmnt='colourify findmnt'
-        alias go-test='colourify go-test'
-        alias ifconfig='colourify ifconfig'
-        alias iostat_sar='colourify iostat_sar'
-        alias ip='colourify ip'
-        alias ipaddr='colourify ipaddr'
-        alias ipneighbor='colourify ipneighbor'
-        alias iproute='colourify iproute'
-        alias iptables='colourify iptables'
-        alias irclog='colourify irclog'
-        alias iwconfig='colourify iwconfig'
-        alias kubectl='colourify kubectl'
-        alias last='colourify last'
-        alias ldap='colourify ldap'
-        alias lolcat='colourify lolcat'
-        alias lsattr='colourify lsattr'
-        alias lsblk='colourify lsblk'
-        alias lsmod='colourify lsmod'
-        alias lsof='colourify lsof'
-        alias lspci='colourify lspci'
-        alias lsusb='colourify lsusb'
-        alias mount='colourify mount'
-        alias mtr='colourify mtr'
-        alias mvn='colourify mvn'
-        alias netstat='colourify netstat'
-        alias nmap='colourify nmap'
-        alias ntpdate='colourify ntpdate'
-        alias ping='colourify ping'
-        alias ping2='colourify ping2'
-        alias proftpd='colourify proftpd'
-        alias pv='colourify pv'
-        alias semanageboolean='colourify semanageboolean'
-        alias semanagefcontext='colourify semanagefcontext'
-        alias semanageuser='colourify semanageuser'
-        alias sensors='colourify sensors'
-        alias showmount='colourify showmount'
-        alias sockstat='colourify sockstat'
-        alias ss='colourify ss'
-        alias stat='colourify stat'
-        alias sysctl='colourify sysctl'
-        alias tcpdump='colourify tcpdump'
-        alias traceroute='colourify traceroute'
-        alias tune2fs='colourify tune2fs'
-        alias ulimit='colourify ulimit'
-        alias uptime='colourify uptime'
-        alias vmstat='colourify vmstat'
-        alias wdiff='colourify wdiff'
-        alias yaml='colourify yaml'
+        # List of commands to check for colorization
+        commands=(
+            ant blkid configure df diff dig dnf docker-machinels dockerimages dockerinfo
+            dockernetwork dockerps dockerpull dockersearch dockerversion du fdisk
+            findmnt go-test ifconfig iostat_sar ip ipaddr ipneighbor iproute iptables
+            irclog iwconfig kubectl last ldap lolcat lsattr lsblk lsmod lsof lspci
+            lsusb mount mtr mvn netstat nmap ntpdate ping ping2 proftpd pv
+            semanageboolean semanagefcontext semanageuser sensors showmount sockstat
+            ss stat sysctl tcpdump traceroute tune2fs ulimit uptime vmstat wdiff yaml
+        )
+
+        # Iterate through the commands and define the alias if the command exists
+        for cmd in "${commands[@]}"; do
+            if command -v "$cmd" >/dev/null; then
+                alias "$cmd"="colourify $cmd"
+            fi
+        done
+        unset commands
     fi
 
     # Set GCC color settings for error and warning messages
