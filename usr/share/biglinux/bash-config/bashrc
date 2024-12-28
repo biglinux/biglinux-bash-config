@@ -32,6 +32,15 @@ alias l='ls -CF'   # Classify entries and display directories with trailing slas
 # Load ble.sh for an enhanced interactive shell experience
 if [[ -f /usr/share/blesh/ble.sh ]] && [[ ! -f ~/.bash-normal ]] && [[ $TERM != linux ]]; then
     source /usr/share/blesh/ble.sh --noattach --rcfile /etc/bigblerc
+
+    # ----- Pyenv Configuration -----
+    # If pyenv is installed, activate it automatically in the home directory.
+    if command -v pyenv >/dev/null; then
+        export PYENV_ROOT="$HOME/.pyenv"
+        export PATH="$PYENV_ROOT/bin:$PATH"
+        eval "$(pyenv init --path)"
+        eval "$(pyenv init -)"
+    fi
     
     # ----- GRC-RS Configuration -----
     # Enable colorized output for various commands
