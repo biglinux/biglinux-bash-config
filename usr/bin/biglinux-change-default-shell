@@ -39,7 +39,7 @@ bash_power() {
     rm -f "$HOME/.bash-normal"
 
     # Update Dolphin's default profile to Bash.profile
-    kwriteconfig5 --file ~/.config/dolphinrc --group "Desktop Entry" --key DefaultProfile Bash.profile 
+    kwriteconfig6 --file ~/.config/dolphinrc --group "Desktop Entry" --key DefaultProfile Bash.profile 
 }
 
 # Handle different input arguments
@@ -55,7 +55,7 @@ elif [[ "$1" = "bash-normal" ]]; then
 elif [[ "$1" = "zsh" ]]; then
     # Update the default Konsole and Dolphin profiles to Zsh.profile
     sed -i 's|DefaultProfile=.*|DefaultProfile=Zsh.profile|g' "$HOME/.config/konsolerc"
-    kwriteconfig5 --file ~/.config/dolphinrc --group "Desktop Entry" --key DefaultProfile Zsh.profile 
+    kwriteconfig6 --file ~/.config/dolphinrc --group "Desktop Entry" --key DefaultProfile Zsh.profile 
 else
     # Display usage instructions if no valid option is provided
     echo $"Use one of the following options:"
