@@ -86,7 +86,7 @@ if [[ -f /usr/share/blesh/ble.sh ]] && [[ ! -f ~/.bash-normal ]] && [[ $TERM != 
             if [ "$use_cat" == true ]; then
                 command cat "$@"
             else
-                bat --paging=never --style=plain "$@"
+                bat --theme=Dracula --paging=never --style=plain "$@"
             fi
         }
         # Customize the 'help' command to display colorized output
@@ -94,9 +94,11 @@ if [[ -f /usr/share/blesh/ble.sh ]] && [[ ! -f ~/.bash-normal ]] && [[ $TERM != 
             if [ $# -eq 0 ]; then
                 command help
             else
-                "$@" --help 2>&1 | bat --paging=never --style=plain --language=help
+                "$@" --help 2>&1 | bat --theme=Dracula --paging=never --style=plain --language=help
             fi
         }
+        # Man with color
+        export MANPAGER="sh -c 'sed -u -e \"s/\\x1B\[[0-9;]*m//g; s/.\\x08//g\" | bat --theme=Dracula -p -lman'"
     fi
     
 fi
@@ -108,6 +110,13 @@ shopt -s histappend     # Append to history file instead of overwriting it
 HISTSIZE=1000           # Number of commands to remember in memory
 HISTFILESIZE=2000       # Number of commands to store in the history file
 shopt -s checkwinsize   # Check and adjust the terminal window size after each command
+
+# Autocomplete case insensitive
+bind -s 'set completion-ignore-case on'
+
+# Cd without cd
+shopt -s autocd
+shopt -s cdspell
 
 # Load custom aliases if ~/.bash_aliases exists
 if [ -f ~/.bash_aliases ]; then
