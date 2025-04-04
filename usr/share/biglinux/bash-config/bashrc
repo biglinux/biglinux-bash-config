@@ -4,17 +4,29 @@
 
 # ----- PATH Configuration -----
 # Add custom and standard binary locations to PATH for command execution
-PATH="$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/bin:/usr/games:/sbin:$HOME/bin:$HOME/.local/bin"
+PATH="\
+$HOME:\
+$HOME/bin:\
+$HOME/.local/bin:\
+/bin:\
+/.nix-profile/bin:\
+/nix/var/nix/profiles/default/bin:\
+/sbin:\
+/usr/bin:\
+/usr/games:\
+/usr/local/bin:\
+/usr/local/sbin:\
+/usr/sbin"
 
 # Only apply the following settings if bash is running interactively
 case $- in
-    *i*) ;;  # Continue if interactive
-    *) return ;;  # Exit if not interactive
+    *i*) ;;      # Continue if interactive
+    *) return ;; # Exit if not interactive
 esac
 
 # ----- Color Support & Aliases -----
 # Enable color support for commands and define aliases for enhanced readability
-if [ -x /usr/bin/dircolors ]; then
+if [[ -x /usr/bin/dircolors ]]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
     alias ls='ls --color=auto'
     alias dir='dir --color=auto'
@@ -45,7 +57,7 @@ if [[ -f /usr/share/blesh/ble.sh ]] && [[ ! -f ~/.bash-normal ]] && [[ $TERM != 
     # ----- GRC-RS Configuration -----
     # Enable colorized output for various commands
     GRC="/usr/bin/grc-rs"
-    if tty -s && [ -n "$TERM" ] && [ "$TERM" != "dumb" ] && [ -n "$GRC" ]; then
+    if tty -s && [[ -n "$TERM" ]] && [[ "$TERM" != "dumb" ]] && [[ -n "$GRC" ]]; then
         alias colourify="$GRC"
         # List of commands to check for colorization
         commands=(
@@ -71,7 +83,7 @@ if [[ -f /usr/share/blesh/ble.sh ]] && [[ ! -f ~/.bash-normal ]] && [[ $TERM != 
     export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
     # Use 'bat' as a replacement for 'cat' with improved output formatting if available
-    if [ -f /usr/bin/bat ]; then
+    if [[ -f /usr/bin/bat ]]; then
         cat() {
             local use_cat=false
             # Check if any argument contains -v, -e, -t or their combinations
@@ -83,7 +95,7 @@ if [[ -f /usr/share/blesh/ble.sh ]] && [[ ! -f ~/.bash-normal ]] && [[ $TERM != 
             done
             
             # If no special options, use bat
-            if [ "$use_cat" == true ]; then
+            if [[ "$use_cat" == true ]]; then
                 command cat "$@"
             else
                 bat --theme=Dracula --paging=never --style=plain "$@"
@@ -91,7 +103,7 @@ if [[ -f /usr/share/blesh/ble.sh ]] && [[ ! -f ~/.bash-normal ]] && [[ $TERM != 
         }
         # Customize the 'help' command to display colorized output
         help() {
-            if [ $# -eq 0 ]; then
+            if [[ $# -eq 0 ]]; then
                 command help
             else
                 "$@" --help 2>&1 | bat --theme=Dracula --paging=never --style=plain --language=help
@@ -119,46 +131,59 @@ shopt -s autocd
 shopt -s cdspell
 
 # Load custom aliases if ~/.bash_aliases exists
-if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
-fi
+[[ -f ~/.bash_aliases ]] && . ~/.bash_aliases
 
 # ----- NVM Configuration -----
 # Load Node Version Manager (NVM) if installed
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+[[ -s "$NVM_DIR/nvm.sh" ]] && . "$NVM_DIR/nvm.sh"
+[[ -s "$NVM_DIR/bash_completion" ]] && . "$NVM_DIR/bash_completion"
 
 # ----- Auto-completion Configuration -----
 # Enable programmable auto-completion if supported
 if ! shopt -oq posix; then
-    if [ -f /usr/share/bash-completion/bash_completion ]; then
+    if [[ -f /usr/share/bash-completion/bash_completion ]]; then
         . /usr/share/bash-completion/bash_completion
-    elif [ -f /etc/bash_completion ]; then
+    elif [[ -f /etc/bash_completion ]]; then
         . /etc/bash_completion
     fi
 fi
 
 # ----- FZF Configuration -----
 # Load FZF key bindings and define custom search functions
-if [ -f /usr/share/fzf/key-bindings.bash ]; then
+if [[ -f /usr/share/fzf/key-bindings.bash ]]; then
     eval "$(fzf --bash)"
     # Define a 'find-in-file' (fif) function using FZF and ripgrep
     fif() {
-    if [ ! "$#" -gt 0 ]; then echo "Need a string to search for!"; return 1; fi
-    fzf --preview "highlight -O ansi -l {} 2> /dev/null | rga --ignore-case --pretty --context 10 '$1' {}" < <(rga --files-with-matches --no-messages "$1")
+        if [[ ! "$#" -gt 0 ]]; then
+          echo "Need a string to search for!"
+          return 1
+        fi
+        fzf --preview "highlight -O ansi -l {} 2> /dev/null | rga --ignore-case --pretty --context 10 '$1' {}" < <(rga --files-with-matches --no-messages "$1")
     }
 fi
 
 # Attach ble.sh if loaded
 if [[ ${BLE_VERSION-} ]]; then
     # Fix if use old snapshot with new blesh cache
-    if grep -q -m1 _ble_decode_hook ~/.cache/blesh/*/decode.bind.*.bind; then _bleCacheVersion=new; else _bleCacheVersion=old; fi
-    if grep -q -m1 _ble_decode_hook /usr/share/blesh/lib/init-bind.sh; then _bleInstalledVersion=new; else _bleInstalledVersion=old; fi
+    if grep -q -m1 _ble_decode_hook ~/.cache/blesh/*/decode.bind.*.bind; then
+      _bleCacheVersion=new
+    else
+      _bleCacheVersion=old
+    fi
+
+    if grep -q -m1 _ble_decode_hook /usr/share/blesh/lib/init-bind.sh; then
+      _bleInstalledVersion=new
+    else
+      _bleInstalledVersion=old
+    fi
+
     [[ $_bleInstalledVersion != $_bleCacheVersion ]] && rm ~/.cache/blesh/*/[dk]*
+
     ble-attach
+
     # FZF Configuration
-    if [ -f /usr/share/fzf/key-bindings.bash ]; then
+    if [[ -f /usr/share/fzf/key-bindings.bash ]]; then
         _ble_contrib_fzf_base=/usr/share/fzf/
     fi
 else
