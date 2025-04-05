@@ -71,7 +71,7 @@ if [[ -f /usr/share/blesh/ble.sh ]] && [[ ! -f ~/.bash-normal ]] && [[ $TERM != 
     export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
     # Use 'bat' as a replacement for 'cat' with improved output formatting if available
-    if [ -f /usr/bin/bat ]; then
+    if command -v bat >/dev/null 2>&1; then
         cat() {
             local use_cat=false
             # Check if any argument contains -v, -e, -t or their combinations
@@ -90,15 +90,67 @@ if [[ -f /usr/share/blesh/ble.sh ]] && [[ ! -f ~/.bash-normal ]] && [[ $TERM != 
             fi
         }
         # Customize the 'help' command to display colorized output
-        help() {
-            if [ $# -eq 0 ]; then
-                command help
+        h() {
+            if [[ -z $1 ]] || [[ $(type -t $1) =~ (builtin|keyword) ]]; then
+                help $@ 2>&1 | bat --theme=Dracula --paging=never --style=plain --language=help
             else
                 "$@" --help 2>&1 | bat --theme=Dracula --paging=never --style=plain --language=help
             fi
         }
         # Man with color
         export MANPAGER="sh -c 'sed -u -e \"s/\\x1B\[[0-9;]*m//g; s/.\\x08//g\" | bat --theme=Dracula -p -lman'"
+
+        # Use from shell, example: c curl -I your.site
+        c() {
+            local exit_code
+            local has_output_option=false
+            
+            # Verify redirection and output arguments
+            if [[ -t 1 && "$has_output_option" == "false" ]]; then
+                set -o pipefail
+                if [[ -n $syntax ]]; then
+                    bat_language="--language=$syntax"
+                fi
+                if [[ "$2" == "-h" || "$2" == "--help" ]]; then
+                    bat_language="--language=help"
+                fi
+
+                command "$@" | bat --theme=Dracula --paging=never --style=plain -f $bat_language
+                exit_code=$?
+                set +o pipefail
+            else
+                $@
+                exit_code=$?
+            fi
+            return $exit_code
+        }
+        # Use for alias, call c_alias, language of bat, and command
+        c_alias() {
+            local exit_code
+            local has_output_option=false
+            
+            # Verify redirection and output arguments
+            if [[ -t 1 && "$has_output_option" == "false" ]]; then
+                bat_language=$1
+                shift
+                set -o pipefail
+                command $@ | bat --theme=Dracula --paging=never --style=plain -f --language=$bat_language
+                exit_code=$?
+                set +o pipefail
+            else
+                command $@
+                exit_code=$?
+            fi
+            return $exit_code
+        }
+        
+        if command -v whois >/dev/null 2>&1; then
+            alias "whois"="c_alias MemInfo whois"
+        fi
+
+        # Add completion support for h command
+        complete -A command -A builtin -A keyword h
+
     fi
     
 fi
