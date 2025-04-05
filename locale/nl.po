@@ -15,15 +15,11 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: attranslate\n"
-
 msgid "Use one of the following options:"
 msgstr "Gebruik een van de volgende opties:"
-
 msgid "Bash + ble.sh + fzf and features for more colorful results"
 msgstr "Bash + ble.sh + fzf en functies voor meer kleurrijke resultaten"
-
 msgid "Bash + fzf"
 msgstr "Bash + FZF"
-
 msgid "Zsh with various included features"
 msgstr "Zsh met verschillende inbegrepen functies"

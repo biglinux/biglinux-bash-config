@@ -15,15 +15,11 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: attranslate\n"
-
 msgid "Use one of the following options:"
 msgstr "다음 옵션 중 하나를 사용하세요:"
-
 msgid "Bash + ble.sh + fzf and features for more colorful results"
 msgstr "Bash + ble.sh + fzf 및 더 다채로운 결과를 위한 기능"
-
 msgid "Bash + fzf"
 msgstr "배쉬 + FZF"
-
 msgid "Zsh with various included features"
 msgstr "다양한 포함된 기능이 있는 Zsh"
