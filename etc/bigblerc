@@ -88,7 +88,7 @@ setPrompt() {
 }
 
 # Set the PROMPT_COMMAND to call setPrompt
-PROMPT_COMMAND=setPrompt
+PROMPT_COMMAND+=";setPrompt"
 
 # Solve problem in PS1 with RRR message
 ble/function#advice around ble/prompt/update 'prompt_unit="" ble/function#advice/do'
