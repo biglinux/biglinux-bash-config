@@ -87,8 +87,8 @@ setPrompt() {
   PS1="$blue2Fg╭─\[\e[38;5;31m\]\[\e[97;48;5;31m\] \[\e[38;5;31;48;5;24m\]\[\e[97m\] \u \[\e[38;5;24;48;5;238m\]\[\e[38;5;254m\] \w \[\e[0;38;5;238m\]$gitBg$gitPrompt$ps1_virtual_env$reset \[\e[38;5;245m\] \t\[\e[0m\]\n$blue2Fg╰─ ❯ "
 }
 
-# Set the PROMPT_COMMAND to call setPrompt
-PROMPT_COMMAND+=";setPrompt"
+# Set the PROMPT_COMMAND to call setPrompt adding in another $PROMPT_COMMAND or with new
+[[ $PROMPT_COMMAND ]] && PROMPT_COMMAND+=";setPrompt" || PROMPT_COMMAND="setPrompt"
 
 # Solve problem in PS1 with RRR message
 ble/function#advice around ble/prompt/update 'prompt_unit="" ble/function#advice/do'
