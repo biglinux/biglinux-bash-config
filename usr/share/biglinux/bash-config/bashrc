@@ -12,6 +12,23 @@ case $- in
     *) return ;;  # Exit if not interactive
 esac
 
+# Load ble.sh for an enhanced interactive shell experience
+if [[ -f /usr/share/blesh/ble.sh ]] && [[ ! -f ~/.bash-normal ]] && [[ $TERM != linux ]]; then
+    source /usr/share/blesh/ble.sh --noattach --rcfile /etc/bigblerc
+    # Fix if use old snapshot with new blesh cache
+    if grep -q -m1 _ble_decode_hook ~/.cache/blesh/*/decode.bind.*.bind; then _bleCacheVersion=new; else _bleCacheVersion=old; fi
+    if grep -q -m1 _ble_decode_hook /usr/share/blesh/lib/init-bind.sh; then _bleInstalledVersion=new; else _bleInstalledVersion=old; fi
+    [[ $_bleInstalledVersion != $_bleCacheVersion ]] && rm ~/.cache/blesh/*/[dk]*
+    ble-attach
+    # FZF Configuration
+    if [ -f /usr/share/fzf/key-bindings.bash ]; then
+        _ble_contrib_fzf_base=/usr/share/fzf/
+    fi
+else
+    # Default PS1 for non-ble.sh interactive sessions
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+fi
+
 # ----- Color Support & Aliases -----
 # Enable color support for commands and define aliases for enhanced readability
 if [ -x /usr/bin/dircolors ]; then
@@ -29,10 +46,7 @@ alias ll='ls -l'   # Long listing format
 alias la='ls -A'   # Show all entries except '.' and '..'
 alias l='ls -CF'   # Classify entries and display directories with trailing slash
 
-# Load ble.sh for an enhanced interactive shell experience
-if [[ -f /usr/share/blesh/ble.sh ]] && [[ ! -f ~/.bash-normal ]] && [[ $TERM != linux ]]; then
-    source /usr/share/blesh/ble.sh --noattach --rcfile /etc/bigblerc
-
+if [[ $BLE_VERSION ]]; then
     # ----- Pyenv Configuration -----
     # If pyenv is installed, activate it automatically in the home directory.
     if command -v pyenv >/dev/null; then
@@ -200,20 +214,4 @@ if [ -f /usr/share/fzf/key-bindings.bash ]; then
     if [ ! "$#" -gt 0 ]; then echo "Need a string to search for!"; return 1; fi
     fzf --preview "highlight -O ansi -l {} 2> /dev/null | rga --ignore-case --pretty --context 10 '$1' {}" < <(rga --files-with-matches --no-messages "$1")
     }
-fi
-
-# Attach ble.sh if loaded
-if [[ ${BLE_VERSION-} ]]; then
-    # Fix if use old snapshot with new blesh cache
-    if grep -q -m1 _ble_decode_hook ~/.cache/blesh/*/decode.bind.*.bind; then _bleCacheVersion=new; else _bleCacheVersion=old; fi
-    if grep -q -m1 _ble_decode_hook /usr/share/blesh/lib/init-bind.sh; then _bleInstalledVersion=new; else _bleInstalledVersion=old; fi
-    [[ $_bleInstalledVersion != $_bleCacheVersion ]] && rm ~/.cache/blesh/*/[dk]*
-    ble-attach
-    # FZF Configuration
-    if [ -f /usr/share/fzf/key-bindings.bash ]; then
-        _ble_contrib_fzf_base=/usr/share/fzf/
-    fi
-else
-    # Default PS1 for non-ble.sh interactive sessions
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 fi
