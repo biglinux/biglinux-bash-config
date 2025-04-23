@@ -18,3 +18,16 @@ for user in $(awk -F':' '{ if ($3 >= 1000 && $1 != "nobody") print $1 }' /etc/pa
         [[ $_bleInstalledVersion != $_bleCacheVersion ]] && rm ~/.cache/blesh/*/[dk]*' "$bashrc"
     fi
 done
+
+# Change TTY font
+if grep -q 'FONT=.'; then
+    echo 'FONT=ter-v22b' >> /etc/vconsole.conf
+fi
+
+# Change TTY color
+if grep -q 'colorscheme="gruvbox-material-dark"' /etc/tty-colorscheme/tty-colorscheme.conf; then
+    echo 'colorscheme="one-half-black"' > /etc/tty-colorscheme/tty-colorscheme.conf
+fi
+
+# Enable tty-colorscheme
+systemctl enable --now tty-colorscheme.service

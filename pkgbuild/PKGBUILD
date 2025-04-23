@@ -9,6 +9,8 @@ depends=('fzf'
     'grc'
     'grc-rs'
     'ripgrep'
+    'terminus-font'
+    'tty-colorscheme'
     'ttf-meslo-nerd-font-powerlevel10k'
     'ttf-nerd-fonts-symbols-with-biglinux')
 # makedepends=('')
