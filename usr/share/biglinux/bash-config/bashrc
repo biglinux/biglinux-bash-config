@@ -20,7 +20,8 @@ if [[ "$TERM" != linux ]] && [[ -f /usr/lib/vte-urlencode-cwd ]] ; then
     }
     PROMPT_COMMAND+=(__vte_osc7)
 else
-    tty-colorscheme one-half-black > /dev/null
+    tty-colorscheme one-half-black
+    setfont /usr/share/kbd/consolefonts/ter-v22b.psf.gz
 fi
 
 # ---------------- ble.sh Configuration ----------------
