@@ -42,6 +42,11 @@ bash_power() {
     kwriteconfig6 --file ~/.config/dolphinrc --group "Desktop Entry" --key DefaultProfile Bash.profile 
 }
 
+# Apply on TTY
+if [[ ! -e "$HOME/.bash_profile" ]]; then
+    ln -s "$HOME/.bashrc" "$HOME/.bash_profile"
+fi
+
 # Handle different input arguments
 if [[ "$1" = "bash-power" ]]; then
     bash_power
