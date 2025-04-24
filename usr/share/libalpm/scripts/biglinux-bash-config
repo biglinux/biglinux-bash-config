@@ -31,6 +31,7 @@ fi
 
 # Stop show color table after login
 sed -i 's|^        cs_print_palette||g' /usr/bin/tty-colorscheme
+sed -i '/Setting %s colorscheme/d' /usr/bin/tty-colorscheme
 
 # Enable tty-colorscheme
 systemctl enable --now tty-colorscheme.service
