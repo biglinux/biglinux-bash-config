@@ -20,7 +20,7 @@ for user in $(awk -F':' '{ if ($3 >= 1000 && $1 != "nobody") print $1 }' /etc/pa
 done
 
 # Change TTY font
-if grep -q 'FONT=.'; then
+if ! grep -q 'FONT=.' /etc/vconsole.conf; then
     echo 'FONT=ter-v22b' >> /etc/vconsole.conf
 fi
 
