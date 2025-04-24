@@ -16,7 +16,7 @@ esac
 # Many terminal emulators use VTE to display the current folder in the tab
 if [[ "$TERM" != linux ]] && [[ -f /usr/lib/vte-urlencode-cwd ]] ; then
     __vte_osc7 () {
-        printf "\033]7;file://%s%s\033\\" "${HOSTNAME}" "$(/usr/lib/vte-urlencode-cwd)"
+        printf "\033]7;file://%s%s\033\\" "$HOSTNAME" "$(/usr/lib/vte-urlencode-cwd)"
     }
     PROMPT_COMMAND+=(__vte_osc7)
 else
