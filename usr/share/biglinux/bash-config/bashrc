@@ -19,6 +19,8 @@ if [[ "$TERM" != linux ]] && [[ -f /usr/lib/vte-urlencode-cwd ]] ; then
         printf "\033]7;file://%s%s\033\\" "${HOSTNAME}" "$(/usr/lib/vte-urlencode-cwd)"
     }
     PROMPT_COMMAND+=(__vte_osc7)
+else
+    tty-colorscheme one-half-black > /dev/null
 fi
 
 # ---------------- ble.sh Configuration ----------------
