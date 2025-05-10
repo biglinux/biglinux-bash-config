@@ -147,6 +147,7 @@ if [[ $TERM != linux ]]; then
     ble-face -s syntax_quoted             'fg=white'
     ble-face -s command_directory         'fg=cyan'
     ble-face -s disabled                  'fg=silver'
+    ble-face -s command_keyword           'fg=cyan,italic'
 
     ble-face -s filename_ls_colors        '' # Disable underline
     ble-face -s filename_other            '' # Disable underline
