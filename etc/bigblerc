@@ -1,233 +1,181 @@
 # -*- mode: sh; mode: sh-bash -*-
 
-# See the complete template at: https://github.com/akinomyoga/ble.sh/blob/master/blerc.template
-# Learn more about ble.sh at: https://github.com/akinomyoga/ble.sh
-# This file contains the configuration for BigLinux. Do not edit it directly; add changes in the ~/.blerc file.
+# BigLinux ble.sh Configuration
+# Template reference: https://github.com/akinomyoga/ble.sh/blob/master/blerc.template
+# Documentation: https://github.com/akinomyoga/ble.sh
+# Note: For customizations, edit ~/.blerc instead of modifying this file directly.
+
+# =============================================
+# CORE BLE.SH OPTIONS
+# =============================================
 
 bleopt history_lazyload=1
-
-# Define colors and styles
-blueBg="\[\e[44m\]"
-blueFg="\[\e[34m\]"
-blue2Fg="\e[38;5;31m\]"
-blackFg="\[\e[30m\]"
-whiteFg="\[\e[37m\]"
-
-# Reset
-fmtReset="\[\e[0m\]"
-
-systemBg="\[\e[48;5;237m\]"
-systemFg="\[\e[38;5;237m\]"
-
-nameBg="\[\e[48;5;248m\]"
-nameFg="\[\e[38;5;248m\]"
-
-# Colors and Nerd Font icons
-redFg="\[\e[38;5;203;48;5;238m\]"
-greenFg="\[\033[032m\]"
-yellowFg="\[\033[033m\]"
-blueFg="\[\e[38;5;75m\]"
-
-gitBg="\[\e[48;5;238m\]"
-gitFg="\[\e[38;5;238m\]"
-
-virtualEnvBg="\[\e[48;5;239m\]"
-virtualEnvFg="\[\e[38;5;239m\]"
-
-yellowFg="\[\033[33m\]"
-
-purpleFg="\[\033[035m\]"
-cyanFg="\[\033[0;36m\]"
-reset="\[\033[0m\]"
-
-gitBranchIcon=""  # Icon for branch
-gitModifiedIcon=""  # Icon for modified files
-gitUntrackedIcon=""  # Icon for untracked files
-gitStagedIcon=""  # Icon for staged files
-
-# Function to get Git information
-gitInfo() {
-
-  # Not use over kio-fuse or gvfs
-  [[ "$PWD" =~ ($UID/gvfs/|$UID/kio-fuse) ]] && return
-
-  # Quick check if current directory is a Git repository
-  git rev-parse --is-inside-work-tree &>/dev/null || return
-
-  # Get branch and status in one shot using plumbing commands for speed
-  branch=$(git symbolic-ref --short HEAD 2>/dev/null || git describe --tags --exact-match 2>/dev/null)
-  
-  if [ -n "$branch" ]; then
-    # Only one call to git status --porcelain=v2 and parse the results efficiently
-    status=$(git status --porcelain=v2 2>/dev/null)
-    
-    # Using grep and wc to count staged, modified, and untracked files
-    staged=$(echo "$status" | grep "^1 .M" | wc -l)
-    modified=$(echo "$status" | grep "^1 M" | wc -l)
-    untracked=$(echo "$status" | grep "^? " | wc -l)
-
-    # Building the Git prompt
-    gitPrompt="$reset $gitFg $gitBg$blueFg $gitBranchIcon \[\e[38;5;254m\]$branch"
-    [ $staged -gt 0 ] && gitPrompt+=" $gitBg$greenFg $gitStagedIcon \[\e[38;5;254m\]$staged"
-    [ $modified -gt 0 ] && gitPrompt+=" $gitBg$yellowFg $gitModifiedIcon \[\e[38;5;254m\]$modified"
-    [ $untracked -gt 0 ] && gitPrompt+=" $gitBg$redFg $gitUntrackedIcon \[\e[38;5;254m\]$untracked"
-    gitPrompt+=" $reset$gitFg$reset"
-
-    echo -e "$gitPrompt"
-  fi
-}
-
-# Function to customize the Bash prompt
-setPrompt() {
-  local gitPrompt
-  gitPrompt=$(gitInfo)
-
-  if [[ -n $VIRTUAL_ENV ]]; then
-    ps1_virtual_env="$reset $virtualEnvFg $virtualEnvBg$yellowFg  \[\e[38;5;254m\]$VIRTUAL_ENV $reset$virtualEnvFg$reset"
-  else
-    unset ps1_virtual_env
-  fi
-
-  PS1="$blue2Fg╭─\[\e[38;5;31m\]\[\e[97;48;5;31m\] \[\e[38;5;31;48;5;24m\]\[\e[97m\] \u \[\e[38;5;24;48;5;238m\]\[\e[38;5;254m\] \w \[\e[0;38;5;238m\]$gitBg$gitPrompt$ps1_virtual_env$reset \[\e[38;5;245m\] \t\[\e[0m\]\n$blue2Fg╰─ ❯ "
-}
-
-
-setPromptTty() {
-  PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-}
-
-# Set the PROMPT_COMMAND normal and TTY
-if [[ $TERM != linux ]]; then
-  PROMPT_COMMAND+=(setPrompt)
-  #Change colors only on normal mode
-  ble-face -s auto_complete        fg=242
-else
-  PROMPT_COMMAND+=(setPromptTty)
-fi
-
-# Change default colors
-ble-face -s filename_directory   underline,fg=blue
-ble-face -s command_builtin      bold,fg=green
-ble-face -s syntax_command       fg=green
-ble-face -s syntax_error         fg=red
-ble-face -s varname_unset        fg=yellow
-ble-face -s command_function     fg=orange
-
-# Solve problem in PS1 with RRR message
-ble/function#advice around ble/prompt/update 'prompt_unit="" ble/function#advice/do'
-
-#bleopt prompt_eol_mark=$'\e[94m[ble: EOF]\e[m'
 bleopt prompt_eol_mark=""
-
-## "exec_errexit_mark" specifies the format of the mark to show the exit status
-## of the command when it is non-zero.  If this setting is an empty string the
-## exit status will not be shown.  The value can contain ANSI escape sequences.
-
 bleopt exec_errexit_mark=$'\e[91m[exit=%d]\e[m'
-
-## The following option specifies the capacity of the command line in the
-## number of characters.  The number 0 or negative numbers means the unlimited
-## capacity.
-
 bleopt line_limit_length=300
-
-## This option specifies the type of the supported grapheme cluster of the
-## terminal.  The empty string indicates that the terminal does not support the
-## grapheme clusters.  The values "extended" and "legacy" indicate that the
-## terminal supports the extended and legacy grapheme clusters, respectively.
-
 bleopt grapheme_cluster=extended
-
-## If "complete_ambiguous" has non-empty values, ambiguous completion
-## candidates are generated for completion.
-
 bleopt complete_ambiguous=
-
-## This option specifies the threshold to simplify the quotation type of the
-## inserted word.  This option is evaluated as an arithmetic expression.  When
-## this option evaluates to a negative value, the simplification of the
-## quotation is disabled.  Otherwise, when the number of characters will be
-## reduced by at least the specified value, the quotation is simplified.  The
-## default is 0, which means that the quotation is simplified unless the number
-## of characters increases by the simplification.
-
 bleopt complete_requote_threshold=-1
-
-## The following setting controls the delay of auto-complete after the last
-## user input. The unit is millisecond.
-
 bleopt complete_auto_delay=150
-
-## The following setting controls the detailed behavior of menu-complete with a
-## colon-separated list of options:
-##
-## - When the option "insert-selection" is specified, the currently selected
-##  menu item is temporarily inserted in the command line.
-
 bleopt complete_menu_complete_opts=
-
-# bleopt menu_align_min=4
 bleopt menu_align_max=150
-
-
-## The setting "filename_ls_colors" can be used to import the filename coloring
-## scheme by the environment variable LS_COLORS.
-
-bleopt filename_ls_colors="$LS_COLORS"
-
-## The following settings enable or disable the syntax highlighting.  When the
-## setting "highlight_syntax" has a non-empty value, the syntax highlighting is
-## enabled.  When the setting "highlight_filename" has a non-empty value, the
-## highlighting based on the filename and the command name is enabled during
-## the process of the syntax highlighting.  Similarly, when the setting
-## "highlight_variable" has a non-empty value, the highlighting based on the
-## variable type is enabled.  All of these settings have non-empty values by
-## default.
-
-#bleopt highlight_syntax=
-bleopt highlight_filename=
-#bleopt highlight_variable=
-
-
-## The following settings control the timeout and user-input cancellation of
-## the pathname expansions performed in the syntax highlighting.  When the word
-## contains a glob pattern that takes a long time to evaluate the pathname
-## expansion, the syntax highlighting based on the filename is canceled based
-## on the timeouts specified by these settings.  "highlight_timeout_sync" /
-## "highlight_timeout_async" specify the timeout durations in milliseconds to
-## be used for the foreground / background syntax highlighting, respectively.
-## When the timeout occurred in the foreground, the syntax highlighting will be
-## deferred to the background syntax highlighting.  When the timeout occurred
-## in the background, the syntax highlighting for the filename is canceled.
-## When the value is empty, the corresponding timeout is disabled.
-## "syntax_eval_polling_interval" specifies the maximal interval between the
-## user-input checking.
-
 bleopt highlight_timeout_sync=50
 bleopt highlight_timeout_async=1000
 bleopt syntax_eval_polling_interval=50
 
+# =============================================
+# COLOR DEFINITIONS
+# =============================================
 
-##-----------------------------------------------------------------------------
-## Settings for Emacs mode
+# Basic ANSI Colors
+reset="\[\e[0m\]"
+blackFg="\[\e[30m\]"
+whiteFg="\[\e[37m\]"
+redFg="\[\e[31m\]"
+greenFg="\[\e[32m\]"
+yellowFg="\[\e[33m\]"
+blueFg="\[\e[34m\]"
+purpleFg="\[\e[35m\]"
+cyanFg="\[\e[36m\]"
+
+# Extended 256 Colors
+blue2Fg="\[\e[38;5;31m\]"
+red2Fg="\[\e[38;5;203m\]"
+systemFg="\[\e[38;5;237m\]"
+nameFg="\[\e[38;5;248m\]"
+gitFg="\[\e[38;5;238m\]"
+virtualEnvFg="\[\e[38;5;239m\]"
+
+# Background Colors
+systemBg="\[\e[48;5;237m\]"
+nameBg="\[\e[48;5;248m\]"
+gitBg="\[\e[48;5;238m\]"
+virtualEnvBg="\[\e[48;5;239m\]"
+
+# =============================================
+# ICON DEFINITIONS (NERD FONTS)
+# =============================================
+
+gitBranchIcon=""
+gitModifiedIcon=""
+gitUntrackedIcon=""
+gitStagedIcon=""
+
+# =============================================
+# PROMPT COMPONENTS
+# =============================================
+
+# Root/non-root color differentiation
+if [[ $EUID = 0 ]]; then
+    promptColorBg='\[\e[97;48;5;88m\]'
+    promptColorFg='\[\e[38;5;88;48;5;24m\]'
+else
+    promptColorBg='\[\e[97;48;5;31m\]'
+    promptColorFg='\[\e[38;5;31;48;5;24m\]'
+fi
+
+# =============================================
+# GIT STATUS FUNCTION
+# =============================================
+
+gitInfo() {
+    # Skip special directories
+    [[ "$PWD" =~ ($UID/(gvfs|kio-fuse)) ]] && return
+
+    # Check if in Git repository
+    git rev-parse --is-inside-work-tree &>/dev/null || return
+    
+    # Get branch information
+    branch=$(git symbolic-ref --short HEAD 2>/dev/null || git describe --tags --exact-match 2>/dev/null)
+    
+    if [ -n "$branch" ]; then
+        # Parse Git status efficiently
+        status=$(git status --porcelain=v2 2>/dev/null)
+        staged=0 modified=0 untracked=0
+        
+        staged=$(grep -c '^1 .M' <<<"$status")
+        modified=$(grep -c '^1 M' <<<"$status")
+        untracked=$(grep -c '^? ' <<<"$status")
+
+        # Build Git prompt section
+        gitPrompt="$reset $gitFg$gitBg$blueFg $gitBranchIcon $whiteFg$branch"
+        [[ $staged -gt 0 ]] && gitPrompt+=" $gitBg$greenFg $gitStagedIcon $whiteFg$staged"
+        [[ $modified -gt 0 ]] && gitPrompt+=" $gitBg$yellowFg $gitModifiedIcon $whiteFg$modified"
+        [[ $untracked -gt 0 ]] && gitPrompt+=" $gitBg$redFg $gitUntrackedIcon $whiteFg$untracked"
+        gitPrompt+=" $reset$gitFg$reset"
+    fi
+}
+
+# =============================================
+# PROMPT CUSTOMIZATION
+# =============================================
+
+setPrompt() {
+    local gitPrompt
+    gitInfo
+
+    if [[ -n $VIRTUAL_ENV ]]; then
+        ps1_virtual_env="$reset $virtualEnvFg $virtualEnvBg$yellowFg  \[\e[38;5;254m\]$VIRTUAL_ENV $reset$virtualEnvFg$reset"
+    else
+        unset ps1_virtual_env
+    fi
+
+    PS1="$promptColorBg  $promptColorFg\[\e[97m\] \u \[\e[38;5;24;48;5;238m\]\[\e[38;5;254m\] \w \[\e[0;38;5;238m\]$gitBg$gitPrompt$ps1_virtual_env$reset \[\e[38;5;245m\] \t\[\e[0m\]\n$blue2Fg❯ "
+}
+
+setPromptTty() {
+    PS1='\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+}
+
+# =============================================
+# TERMINAL-SPECIFIC SETUP
+# =============================================
+
+if [[ $TERM != linux ]]; then
+    PROMPT_COMMAND+=(setPrompt)
+    # Syntax highlighting colors
+    ble-face -s auto_complete             'fg=242'
+    ble-face -s command_builtin           'fg=lime'
+    ble-face -s command_function          'fg=yellow'
+    ble-face -s syntax_command            'fg=green'
+    ble-face -s syntax_error              'fg=silver,bg=52'
+    ble-face -s varname_unset             'fg=magenta'
+    ble-face -s command_function          'fg=green,italic'
+    ble-face -s syntax_function_name      'fg=yellow'
+    ble-face -s syntax_brace              'fg=olive'
+    ble-face -s syntax_delimiter          'fg=yellow'
+    ble-face -s syntax_quoted             'fg=white'
+    ble-face -s command_directory         'fg=cyan'
+    ble-face -s disabled                  'fg=silver'
+
+    ble-face -s filename_ls_colors        '' # Disable underline
+    ble-face -s filename_other            '' # Disable underline
+    
+else
+    PROMPT_COMMAND+=(setPromptTty)
+    bleopt accept_line_threshold=-1
+    bleopt prompt_command_changes_layout=1
+fi
+
+bleopt filename_ls_colors="$LS_COLORS"
+
+
+# =============================================
+# EMACS MODE SETTINGS
+# =============================================
 
 function blerc/emacs-load-hook {
-  #----------------------------------------------------------------------------
-  # Settings for the mode indicator
-
-  ## The following option specifies the content of the mode indicator shown in
-  ## the info line as a prompt sequence.
-
-  #bleopt prompt_emacs_mode_indicator='\q{keymap:emacs/mode-indicator}'
-
-  ## The following option specifies the multiline mode name used in the prompt
-  ## sequence \q{keymap:emacs/mode-indicator} in the multiline editing mode.
-
-  # default
-  bleopt keymap_emacs_mode_string_multiline=$'\e[1m-- Press Ctrl + J to execute or Ctrl + C to cancel --\e[m'
-  return 0
+    bleopt keymap_emacs_mode_string_multiline=$'\e[1m-- Press Ctrl + J to execute or Ctrl + C to cancel --\e[m'
+    return 0
 }
 blehook/eval-after-load keymap_emacs blerc/emacs-load-hook
+
+# =============================================
+# WORKAROUNDS AND FINAL SETUP
+# =============================================
+
+# Fix PS1 RRR message issue
+ble/function#advice around ble/prompt/update 'prompt_unit="" ble/function#advice/do'
 
 # Load user configuration
 [[ -e ~/.blerc ]] && source ~/.blerc
