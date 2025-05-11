@@ -134,7 +134,7 @@ setPromptTty() {
 
 if [[ $TERM != linux ]]; then
     PROMPT_COMMAND+=(setPrompt)
-    bleopt color_scheme=catppuccin_mocha
+
     # Syntax highlighting colors
     ble-face -s auto_complete             'fg=242'
     ble-face -s command_alias             'fg=green,italic'
