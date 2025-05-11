@@ -44,7 +44,10 @@ bash_power() {
 
 # Apply on TTY
 if [[ ! -e "$HOME/.bash_profile" ]]; then
-    ln -s "$HOME/.bashrc" "$HOME/.bash_profile"
+    echo '# Adding .bashrc to tty
+if [[ "$TERM" == linux ]]; then
+    [[ -f ~/.bashrc ]] && . ~/.bashrc
+fi' > "$HOME/.bash_profile"
 fi
 
 # Handle different input arguments
