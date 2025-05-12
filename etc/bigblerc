@@ -23,6 +23,7 @@ bleopt highlight_timeout_sync=50
 bleopt highlight_timeout_async=1000
 bleopt syntax_eval_polling_interval=50
 bleopt complete_contract_function_names=1
+bleopt accept_line_threshold=-1 # Enable compatibility with AI agents
 bleopt filename_ls_colors="$LS_COLORS"
 
 # =============================================
@@ -168,7 +169,6 @@ else
     # TTY terminal setup
     PS1='\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
     bleopt prompt_command_changes_layout=1
-    bleopt accept_line_threshold=-1
 fi
 
 # =============================================
