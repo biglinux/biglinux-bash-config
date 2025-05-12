@@ -23,35 +23,28 @@ bleopt highlight_timeout_sync=50
 bleopt highlight_timeout_async=1000
 bleopt syntax_eval_polling_interval=50
 bleopt complete_contract_function_names=1
+bleopt filename_ls_colors="$LS_COLORS"
 
 # =============================================
 # COLOR DEFINITIONS
 # =============================================
 
 # Basic ANSI Colors
-reset="\[\e[0m\]"
-blackFg="\[\e[30m\]"
-whiteFg="\[\e[37m\]"
-redFg="\[\e[31m\]"
-greenFg="\[\e[32m\]"
-yellowFg="\[\e[33m\]"
-blueFg="\[\e[34m\]"
-purpleFg="\[\e[35m\]"
-cyanFg="\[\e[36m\]"
+reset="\001\033[0m\002"
+whiteFg="\001\033[37m\002"
+redFg="\001\033[31m\002"
+greenFg="\001\033[32m\002"
+yellowFg="\001\033[33m\002"
+blueFg="\001\033[34m\002"
 
 # Extended 256 Colors
-blue2Fg="\[\e[38;5;31m\]"
-red2Fg="\[\e[38;5;203m\]"
-systemFg="\[\e[38;5;237m\]"
-nameFg="\[\e[38;5;248m\]"
-gitFg="\[\e[38;5;238m\]"
-virtualEnvFg="\[\e[38;5;239m\]"
+blue2Fg="\001\033[38;5;31m\002"
+gitFg="\001\033[38;5;238m\002"
+virtualEnvFg="\001\033[38;5;239m\002"
 
 # Background Colors
-systemBg="\[\e[48;5;237m\]"
-nameBg="\[\e[48;5;248m\]"
-gitBg="\[\e[48;5;238m\]"
-virtualEnvBg="\[\e[48;5;239m\]"
+gitBg="\001\033[48;5;238m\002"
+virtualEnvBg="\001\033[48;5;239m\002"
 
 # =============================================
 # ICON DEFINITIONS (NERD FONTS)
@@ -61,6 +54,7 @@ gitBranchIcon=""
 gitModifiedIcon=""
 gitUntrackedIcon=""
 gitStagedIcon=""
+export VIRTUAL_ENV_DISABLE_PROMPT=1
 
 # =============================================
 # PROMPT COMPONENTS
@@ -75,106 +69,107 @@ else
     promptColorFg='\[\e[38;5;31;48;5;24m\]'
 fi
 
-# =============================================
-# GIT STATUS FUNCTION
-# =============================================
 
-gitInfo() {
-    # Skip special directories
-    [[ "$PWD" =~ ($UID/(gvfs|kio-fuse)) ]] && return
+runPS1() {
+    # ===========================
+    # GIT STATUS 
+    # ===========================
 
-    # Check if in Git repository
-    git rev-parse --is-inside-work-tree &>/dev/null || return
-    
-    # Get branch information
-    branch=$(git symbolic-ref --short HEAD 2>/dev/null || git describe --tags --exact-match 2>/dev/null)
-    
-    if [ -n "$branch" ]; then
-        # Parse Git status efficiently
-        status=$(git status --porcelain=v2 2>/dev/null)
-        staged=0 modified=0 untracked=0
+    # Check if inside a Git repository and not in GVFS or Kio
+    if [[ ! "$PWD" =~ ($UID/(gvfs|kio-fuse)) ]] && git rev-parse --is-inside-work-tree &>/dev/null; then
+
+        # Get branch information
+        branch=$(git symbolic-ref --short HEAD 2>/dev/null || git describe --tags --exact-match 2>/dev/null)
         
-        staged=$(grep -c '^1 .M' <<<"$status")
-        modified=$(grep -c '^1 M' <<<"$status")
-        untracked=$(grep -c '^? ' <<<"$status")
+        if [ -n "$branch" ]; then
+            # Parse Git status efficiently
+            status=$(git status --porcelain=v2 2>/dev/null)
+            staged=0 modified=0 untracked=0
+            
+            staged=$(grep -c '^1 .M' <<<"$status")
+            modified=$(grep -c '^1 M' <<<"$status")
+            untracked=$(grep -c '^? ' <<<"$status")
 
-        # Build Git prompt section
-        gitPrompt="$reset $gitFg$gitBg$blueFg $gitBranchIcon $whiteFg$branch"
-        [[ $staged -gt 0 ]] && gitPrompt+=" $gitBg$greenFg $gitStagedIcon $whiteFg$staged"
-        [[ $modified -gt 0 ]] && gitPrompt+=" $gitBg$yellowFg $gitModifiedIcon $whiteFg$modified"
-        [[ $untracked -gt 0 ]] && gitPrompt+=" $gitBg$redFg $gitUntrackedIcon $whiteFg$untracked"
-        gitPrompt+=" $reset$gitFg$reset"
+            # Build Git prompt section
+            gitPrompt="$reset $gitFg$gitBg$blueFg $gitBranchIcon $whiteFg$branch"
+            [[ $staged -gt 0 ]] && gitPrompt+=" $gitBg$greenFg $gitStagedIcon $whiteFg$staged"
+            [[ $modified -gt 0 ]] && gitPrompt+=" $gitBg$yellowFg $gitModifiedIcon $whiteFg$modified"
+            [[ $untracked -gt 0 ]] && gitPrompt+=" $gitBg$redFg $gitUntrackedIcon $whiteFg$untracked"
+            gitPrompt+=" $reset$gitFg$reset"
+            echo -en "$gitPrompt"
+        fi
     fi
+
+    # ===========================
+    # VIRTUAL ENVIRONMENT STATUS
+    # ===========================
+
+    if [[ -n $VIRTUAL_ENV ]]; then
+        echo -en "$reset$virtualEnvFg $virtualEnvBg$yellowFg  \001\033[38;5;254m\002$VIRTUAL_ENV $reset$virtualEnvFg$reset"
+    fi
+
 }
 
 # =============================================
 # PROMPT CUSTOMIZATION
 # =============================================
 
-setPrompt() {
-    local gitPrompt
-    gitInfo
-
-    if [[ -n $VIRTUAL_ENV ]]; then
-        ps1_virtual_env="$reset $virtualEnvFg $virtualEnvBg$yellowFg  \[\e[38;5;254m\]$VIRTUAL_ENV $reset$virtualEnvFg$reset"
-    else
-        unset ps1_virtual_env
-    fi
-
-    PS1="$promptColorBg  $promptColorFg\[\e[97m\] \u \[\e[38;5;24;48;5;238m\]\[\e[38;5;254m\] \w \[\e[0;38;5;238m\]$gitBg$gitPrompt$ps1_virtual_env$reset \[\e[38;5;245m\] \t\[\e[0m\]\n$blue2Fg❯ "
+setPS1() {
+    echo -e "$promptColorBg  $promptColorFg\[\e[97m\] \u \[\e[38;5;24;48;5;238m\]\[\e[38;5;254m\] \w \[\e[0;38;5;238m\]$gitBg\$(runPS1)$ps1_virtual_env$reset\[\e[38;5;245m\] \\\t\[\e[0m\]\n$blue2Fg❯ "
 }
 
-setPromptTty() {
-    PS1='\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-}
 
 # =============================================
 # TERMINAL-SPECIFIC SETUP
 # =============================================
 
+# Colors
+ble-face -s filename_ls_colors        '' # Disable underline
+ble-face -s filename_other            '' # Disable underline
+ble-face -s filename_executable       'fg=green'
+ble-face -s command_keyword           'fg=blue,italic'
+ble-face -s syntax_varname            'fg=magenta'
+ble-face -s varname_array             'fg=magenta'
+ble-face -s varname_empty             'fg=magenta,italic'
+ble-face -s varname_export            'fg=magenta'
+ble-face -s varname_expr              'fg=magenta'
+ble-face -s varname_hash              'fg=magenta'
+ble-face -s varname_number            'fg=magenta'
+ble-face -s varname_readonly          'fg=magenta'
+ble-face -s varname_transform         'fg=magenta'
+ble-face -s varname_unset             'fg=magenta,italic'
+ble-face -s varname_unset             'fg=magenta'
+ble-face -s command_function          'fg=green,italic'
+ble-face -s syntax_function_name      'fg=yellow'
+ble-face -s syntax_brace              'fg=olive'
+ble-face -s syntax_delimiter          'fg=yellow'
+ble-face -s syntax_quoted             'fg=white'
+ble-face -s command_directory         'fg=green'
+ble-face -s filename_directory        'fg=cyan'
+ble-face -s disabled                  'fg=silver'
+ble-face -s command_keyword           'fg=cyan,italic'
+ble-face -s argument_option           'fg=yellow'
+ble-face -s syntax_param_expansion    'fg=magenta'
+ble-face -s command_alias             'fg=green,italic'
+ble-face -s command_file              'fg=green'
+ble-face -s command_builtin           'fg=lime'
+ble-face -s syntax_command            'fg=green'
+
 if [[ $TERM != linux ]]; then
-    PROMPT_COMMAND+=(setPrompt)
+    # Set up prompt for interactive shells
+    PS1="$(setPS1)"
 
-    # Syntax highlighting colors
+    # Syntax highlighting only for non TTY terminal
     ble-face -s auto_complete             'fg=242'
-    ble-face -s command_alias             'fg=green,italic'
-    ble-face -s command_file              'fg=green'
-    ble-face -s command_builtin           'fg=lime'
-    ble-face -s syntax_command            'fg=green'
     ble-face -s syntax_error              'fg=silver,bg=52'
-    ble-face -s varname_unset             'fg=magenta'
-    ble-face -s command_function          'fg=green,italic'
-    ble-face -s syntax_function_name      'fg=yellow'
-    ble-face -s syntax_brace              'fg=olive'
-    ble-face -s syntax_delimiter          'fg=yellow'
-    ble-face -s syntax_quoted             'fg=white'
-    ble-face -s command_directory         'fg=green'
-    ble-face -s filename_directory        'fg=cyan'
-    ble-face -s disabled                  'fg=silver'
-    ble-face -s command_keyword           'fg=cyan,italic'
-    ble-face -s argument_option           'fg=yellow'
-    ble-face -s syntax_param_expansion    'fg=magenta'
     ble-face -s syntax_comment            'fg=247'
-    ble-face -s filename_ls_colors        '' # Disable underline
-    ble-face -s filename_other            '' # Disable underline
-    ble-face -s command_keyword           'fg=blue,italic'
-    ble-face -s syntax_varname            'fg=magenta'
-    ble-face -s varname_array             'fg=magenta'
-    ble-face -s varname_empty             'fg=magenta'
-    ble-face -s varname_export            'fg=magenta'
-    ble-face -s varname_expr              'fg=magenta'
-    ble-face -s varname_hash              'fg=magenta'
-    ble-face -s varname_number            'fg=magenta'
-    ble-face -s varname_readonly          'fg=magenta'
-    ble-face -s varname_transform         'fg=magenta'
-    ble-face -s varname_unset             'fg=magenta'
+
 else
-    PROMPT_COMMAND+=(setPromptTty)
-    bleopt accept_line_threshold=-1
+    # TTY terminal setup
+    PS1='\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
     bleopt prompt_command_changes_layout=1
+    bleopt accept_line_threshold=-1
 fi
-
-
 
 # =============================================
 # EMACS MODE SETTINGS
