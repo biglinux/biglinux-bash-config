@@ -23,7 +23,7 @@ bleopt highlight_timeout_sync=50
 bleopt highlight_timeout_async=1000
 bleopt syntax_eval_polling_interval=50
 bleopt complete_contract_function_names=1
-bleopt accept_line_threshold=-1 # Enable compatibility with AI agents
+bleopt accept_line_threshold=-1 # Enable compatibility with some AI agent and auto debug
 bleopt filename_ls_colors="$LS_COLORS"
 
 # =============================================
@@ -92,10 +92,10 @@ runPS1() {
             untracked=$(grep -c '^? ' <<<"$status")
 
             # Build Git prompt section
-            gitPrompt="$reset $gitFg$gitBg$blueFg $gitBranchIcon $whiteFg$branch"
-            [[ $staged -gt 0 ]] && gitPrompt+=" $gitBg$greenFg $gitStagedIcon $whiteFg$staged"
-            [[ $modified -gt 0 ]] && gitPrompt+=" $gitBg$yellowFg $gitModifiedIcon $whiteFg$modified"
-            [[ $untracked -gt 0 ]] && gitPrompt+=" $gitBg$redFg $gitUntrackedIcon $whiteFg$untracked"
+            gitPrompt="$reset $gitFg$gitBg$blueFg $gitBranchIcon$whiteFg $branch"
+            [[ $staged -gt 0 ]] && gitPrompt+=" $gitBg$greenFg $gitStagedIcon$whiteFg $staged"
+            [[ $modified -gt 0 ]] && gitPrompt+=" $gitBg$yellowFg $gitModifiedIcon$whiteFg $modified"
+            [[ $untracked -gt 0 ]] && gitPrompt+=" $gitBg$redFg $gitUntrackedIcon$whiteFg $untracked"
             gitPrompt+=" $reset$gitFg$reset"
             echo -en "$gitPrompt"
         fi
