@@ -20,7 +20,7 @@ if [[ "$TERM" != linux ]]; then
     }
     PROMPT_COMMAND+=(__vte_osc7)
 else
-    tty-colorscheme one-half-black
+    tty-colorscheme one-half-black > /dev/null
     setfont /usr/share/kbd/consolefonts/ter-v22b.psf.gz
 fi
 
