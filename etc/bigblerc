@@ -25,19 +25,18 @@ bleopt syntax_eval_polling_interval=50
 bleopt complete_contract_function_names=1
 bleopt accept_line_threshold=-1 # Enable compatibility with some AI agent and auto debug
 bleopt filename_ls_colors="$LS_COLORS"
+bleopt history_erasedups_limit=100
 
 # =============================================
 # COLOR DEFINITIONS
 # =============================================
 
-# Basic ANSI Colors
+# Colors
 reset="\001\033[0m\002"
 whiteFg="\001\033[37m\002"
 redFg="\001\033[31m\002"
 greenFg="\001\033[32m\002"
 yellowFg="\001\033[33m\002"
-
-# Extended 256 Colors
 blueFg="\001\033[38;5;81m\002"
 blue2Fg="\001\033[38;5;31m\002"
 gitFg="\001\033[38;5;238m\002"
@@ -80,16 +79,16 @@ runPS1() {
     if [[ ! "$PWD" =~ ($UID/(gvfs|kio-fuse)) ]] && git rev-parse --is-inside-work-tree &>/dev/null; then
 
         # Get branch information
-        branch=$(git symbolic-ref --short HEAD 2>/dev/null || git describe --tags --exact-match 2>/dev/null)
+        branch=${ git symbolic-ref --short HEAD 2>/dev/null || git describe --tags --exact-match 2>/dev/null; }
         
         if [ -n "$branch" ]; then
             # Parse Git status efficiently
-            status=$(git status --porcelain=v2 2>/dev/null)
+            status=${ git status --porcelain=v2 2>/dev/null; }
             staged=0 modified=0 untracked=0
             
-            staged=$(grep -c '^1 .M' <<<"$status")
-            modified=$(grep -c '^1 M' <<<"$status")
-            untracked=$(grep -c '^? ' <<<"$status")
+            staged=${ grep -c '^1 .M' <<<"$status"; }
+            modified=${ grep -c '^1 M' <<<"$status"; }
+            untracked=${ grep -c '^? ' <<<"$status"; }
 
             # Build Git prompt section
             gitPrompt="$reset $gitFg$gitBg$blueFg $gitBranchIcon$whiteFg $branch"
@@ -111,14 +110,56 @@ runPS1() {
 
 }
 
+
+runttyPS1() {
+    # ===========================
+    # VIRTUAL ENVIRONMENT STATUS
+    # ===========================
+    if [[ -n $VIRTUAL_ENV ]]; then
+        echo -en " venv"
+    fi
+
+    # ===========================
+    # GIT STATUS 
+    # ===========================
+    # Check if inside a Git repository and not in GVFS or Kio
+    if [[ ! "$PWD" =~ ($UID/(gvfs|kio-fuse)) ]] && git rev-parse --is-inside-work-tree &>/dev/null; then
+
+        # Get branch information
+        branch=${ git symbolic-ref --short HEAD 2>/dev/null || git describe --tags --exact-match 2>/dev/null; }
+        
+        if [ -n "$branch" ]; then
+            # Parse Git status efficiently
+            status=${ git status --porcelain=v2 2>/dev/null; }
+            staged=0 modified=0 untracked=0
+            
+            staged=${ grep -c '^1 .M' <<<"$status"; }
+            modified=${ grep -c '^1 M' <<<"$status"; }
+            untracked=${ grep -c '^? ' <<<"$status"; }
+            
+            # Build Git prompt section
+            gitPrompt="$reset $branch"
+            [[ $staged -gt 0 ]] && gitPrompt+="$greenFg S:$staged"      # green
+            [[ $modified -gt 0 ]] && gitPrompt+="$yellowFg M:$modified"    # yellow
+            [[ $untracked -gt 0 ]] && gitPrompt+="$redFg ?:$untracked"   # red
+            gitPrompt+="$reset"
+            echo -en "$gitPrompt "
+        fi
+    fi
+}
+
+
 # =============================================
 # PROMPT CUSTOMIZATION
 # =============================================
 
 setPS1() {
-    echo -e "$promptColorBg  $promptColorFg\[\e[97m\] \u \[\e[38;5;24;48;5;238m\]\[\e[38;5;254m\] \w \[\e[0;38;5;238m\]$gitBg\$(runPS1)$ps1_virtual_env$reset\[\e[38;5;245m\] \\\t\[\e[0m\]\n$blue2Fg❯ "
+    echo -e "$promptColorBg  $promptColorFg\[\e[97m\] \u \[\e[38;5;24;48;5;238m\]\[\e[38;5;254m\] \w \[\e[0;38;5;238m\]$gitBg\${ runPS1; }$ps1_virtual_env$reset\[\e[38;5;245m\] \\\t\[\e[0m\]\n$blue2Fg❯ "
 }
 
+setttyPS1() {
+    echo -e "\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\${ runttyPS1; }\[\033[0m\]\$ "
+}
 
 # =============================================
 # TERMINAL-SPECIFIC SETUP
@@ -158,7 +199,7 @@ ble-face -s syntax_command            'fg=green'
 
 if [[ $TERM != linux ]]; then
     # Set up prompt for interactive shells
-    PS1="$(setPS1)"
+    PS1="${ setPS1; }"
 
     # Syntax highlighting only for non TTY terminal
     ble-face -s auto_complete             'fg=242'
@@ -167,7 +208,7 @@ if [[ $TERM != linux ]]; then
 
 else
     # TTY terminal setup
-    PS1='\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+    PS1="${ setttyPS1; }"
     bleopt prompt_command_changes_layout=1
 fi
 
