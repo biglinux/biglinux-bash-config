@@ -55,7 +55,7 @@ if [[ -f /usr/share/blesh/ble.sh ]] && [[ ! -f ~/.bash-normal ]] && [[ -z $TERM_
         _ble_contrib_fzf_base=/usr/share/fzf/
     fi
 else
-    runttyPS1() {
+    runPS1() {
         # Colors
         reset="\001\033[0m\002"
         redFg="\001\033[31m\002"
@@ -98,11 +98,11 @@ else
         fi
     }
 
-    setttyPS1() {
-        echo -e "\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\${ runttyPS1; }\[\033[0m\]\$"
+    setPS1() {
+        echo -e "\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$(runPS1)\[\033[0m\]\$"
     }
     
-    PS1="${ setttyPS1; } "
+    PS1="${ setPS1; } "
     
     # Prevents the vscode agent from using the true command to bypass error output checking
     if [[ "$TERM_PROGRAM" = "vscode" ]]; then
